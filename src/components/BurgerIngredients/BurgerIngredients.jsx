@@ -1,7 +1,8 @@
 import React from 'react';
 import { Counter, Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
 import burgerIngredients from './BurgerIngredients.module.css';
-import BurgerPiece from '../BurgerIngredient/BurgerIngredient';
+import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 
 const BurgerIngredients = props => {
     const [currentTab, setCurrentTab] = React.useState('bun');
@@ -21,7 +22,7 @@ const BurgerIngredients = props => {
                 <div className={`${burgerIngredients.category} pl-4 mt-6`}>
                     {
                         buns.map(item => (
-                            <BurgerPiece key={item._id} image={item.image} price={item.price} name={item.name} />
+                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} />
                         ))
                     }
                 </div>
@@ -29,7 +30,7 @@ const BurgerIngredients = props => {
                 <div className={`${burgerIngredients.category} pl-4 mt-6`}>
                     {
                         sauces.map(item => (
-                            <BurgerPiece key={item._id} image={item.image} price={item.price} name={item.name} />
+                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} />
                         ))
                     }
                 </div>
@@ -37,13 +38,17 @@ const BurgerIngredients = props => {
                 <div className={`${burgerIngredients.category} pl-4 mt-6`}>
                     {
                         main.map(item => (
-                            <BurgerPiece key={item._id} image={item.image} price={item.price} name={item.name} />
+                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} />
                         ))
                     }
                 </div>
             </div>
         </div>
     )
+};
+
+BurgerIngredients.propTypes = {
+    data: PropTypes.array
 };
 
 export default BurgerIngredients;

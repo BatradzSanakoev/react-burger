@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { CurrencyIcon, DragIcon, LockIcon, DeleteIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorItem from './BurgerConstructorItem.module.css';
 
 const BurgerConstructorItem = props => {
-
     const burgerTopBottomNote = () => {
         if (!props.type) return '';
         if (props.type === 'bun-top') return '(верх)';
@@ -16,7 +16,7 @@ const BurgerConstructorItem = props => {
     };
 
     return (
-        <div className={`${burgerConstructorItem.item}`} style={{ justifyContent: `${props.type && 'flex-end'}`}}>
+        <div className={`${burgerConstructorItem.item}`} style={{ justifyContent: `${props.type && 'flex-end'}` }}>
             {!props.type && <DragIcon type='primary' />}
             <div className={`${burgerTopBottomClass()} pl-6 pt-4 pb-4 pr-8`}>
                 <img alt='item-card' src={props.image} className={burgerConstructorItem.image} />
@@ -31,6 +31,13 @@ const BurgerConstructorItem = props => {
             </div>
         </div>
     )
+};
+
+BurgerConstructorItem.propTypes = {
+    image: PropTypes.string,
+    name: PropTypes.string,
+    price: PropTypes.number,
+    type: PropTypes.string
 };
 
 export default BurgerConstructorItem;

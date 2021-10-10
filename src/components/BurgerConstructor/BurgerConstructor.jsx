@@ -1,14 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import burgerConstructor from './BurgerConstructor.module.css';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
-import data from '../utils/data.json';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const BurgerConstructor = props => {
-    const bun = data.find(item => item.type === 'bun');
+    const bun = props.data.find(item => item.type === 'bun');
     const summaryPrice = () => {
         let sum = 0;
-        data.forEach(item => {
+        props.data.forEach(item => {
             if (item.type !== 'bun') sum += item.price;
         });
         return sum + bun.price;
@@ -21,7 +21,7 @@ const BurgerConstructor = props => {
                 </div>
                 <div className={`mt-4 pr-2 ${burgerConstructor.list}`}>
                     {
-                        data.map(item => (
+                        props.data.map(item => (
                             item.type !== 'bun' && <BurgerConstructorItem key={item._id} image={item.image} name={item.name} price={item.price} />
                         ))
                     }
@@ -39,6 +39,10 @@ const BurgerConstructor = props => {
             </div>
         </div>
     )
+};
+
+BurgerConstructor.propTypes = {
+    data: PropTypes.array
 };
 
 export default BurgerConstructor;

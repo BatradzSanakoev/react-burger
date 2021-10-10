@@ -12,7 +12,7 @@ const App = () => {
             <main className={appStyles.main}>
                 <div className={appStyles.content}>
                     <BurgerIngredients data={data} />
-                    <BurgerConstructor />
+                    <BurgerConstructor data={data} />
                 </div>
             </main>
         </>
