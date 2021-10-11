@@ -17,9 +17,9 @@ const BurgerIngredient = props => {
 };
 
 BurgerIngredient.propTypes = {
-    image: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.number,
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
     type: PropTypes.string
 };
 
