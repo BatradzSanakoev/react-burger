@@ -1,0 +1,27 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerContent {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navGroup {
+    width: 30%;
+    display: flex;
+}
+
+.navButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navText {
+    font-size: 16px;
+    line-height: 24px;
+}
