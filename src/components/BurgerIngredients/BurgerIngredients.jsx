@@ -1,14 +1,20 @@
 import React from 'react';
-import { Counter, Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import burgerIngredients from './BurgerIngredients.module.css';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 
 const BurgerIngredients = props => {
     const [currentTab, setCurrentTab] = React.useState('bun');
-    const buns = props.data.filter(item => item.type === 'bun');
-    const sauces = props.data.filter(item => item.type === 'sauce');
-    const main = props.data.filter(item => item.type === 'main');
+    const buns = React.useMemo(() => {
+        return props.data.filter(item => item.type === 'bun');
+    }, [props.data]);
+    const sauces = React.useMemo(() => {
+        return props.data.filter(item => item.type === 'sauce');
+    }, [props.data]);
+    const main = React.useMemo(() => {
+        return props.data.filter(item => item.type === 'main');
+    }, [props.data]);
     return (
         <div className={burgerIngredients.content}>
             <h1 className='mt-10 text text_type_main-large' style={{ marginBottom: 0 }}>Соберите бургер</h1>
@@ -22,7 +28,7 @@ const BurgerIngredients = props => {
                 <div className={`${burgerIngredients.category} pl-4 mt-6`}>
                     {
                         buns.map(item => (
-                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} />
+                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
                         ))
                     }
                 </div>
@@ -30,7 +36,7 @@ const BurgerIngredients = props => {
                 <div className={`${burgerIngredients.category} pl-4 mt-6`}>
                     {
                         sauces.map(item => (
-                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} />
+                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
                         ))
                     }
                 </div>
@@ -38,7 +44,7 @@ const BurgerIngredients = props => {
                 <div className={`${burgerIngredients.category} pl-4 mt-6`}>
                     {
                         main.map(item => (
-                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} />
+                            <BurgerIngredient key={item._id} image={item.image} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
                         ))
                     }
                 </div>

@@ -1,11 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CurrencyIcon, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredient from './BurgerIngredient.module.css';
 
-const BurgerIngredient = props => {
+const BurgerIngredient = props => { 
+    const ingredientProps = {
+        name: props.name,
+        proteins: props.proteins,
+        fat: props.fat,
+        carbohydrates: props.carbohydrates,
+        calories: props.calories,
+        image: props.image
+    };
+    const handleClick = () => {
+        props.onModalType();
+        props.onIngredientProps(ingredientProps);
+        props.onModalOpen();
+    };
+
     return (
-        <div className={burgerIngredient.item}>
+        <div className={burgerIngredient.item} onClick={handleClick}>
             <img src={props.image} alt='burger-item' className={burgerIngredient.image} />
             <div className={`${burgerIngredient.price} mt-1`}>
                 <p className={`text text_type_main-medium ${burgerIngredient.priceValue}`}>{props.price}</p>
