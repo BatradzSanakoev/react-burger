@@ -1,9 +1,9 @@
 import React from 'react';
 import modalOverlay from './ModalOverlay.module.css'
 
-const ModalOverlay = ({ children }) => {
+const ModalOverlay = ({ children, onModalClose }) => {
     return (
-        <div className={modalOverlay.overlay}>
+        <div className={modalOverlay.overlay} onClick={e => e.target === e.currentTarget && onModalClose()}>
             {children}
         </div>
     )

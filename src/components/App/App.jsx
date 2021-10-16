@@ -3,7 +3,8 @@ import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import Modal from '../Modal/Modal';
-import ModalOverlay from '../ModalOverlay/ModalOverlay';
+import IngredientDetails from '../IngredientDetails/IngredientDetails';
+import OrderDetails from '../OrderDetails/OrderDetails';
 import appStyles from './App.module.css';
 import { MAIN_API } from '../../utils/constants';
 
@@ -36,7 +37,7 @@ const App = () => {
     React.useEffect(() => {
         fetch(`${MAIN_API}`)
             .then(res => {
-                return res.json();
+                if (res.ok) return res.json();
             })
             .then(res => setData(res.data))
             .catch(err => console.log(err));
@@ -46,9 +47,13 @@ const App = () => {
         <>
             {
                 modalDisplay &&
-                <ModalOverlay>
-                    <Modal type={modalType} onModalClose={handleCloseModal} ingredientProps={ingredientProps} />
-                </ModalOverlay>
+                <Modal onModalClose={handleCloseModal} type={modalType}>
+                    {
+                        modalType === 'order'
+                            ? <OrderDetails />
+                            : <IngredientDetails {...ingredientProps} />
+                    }
+                </Modal>
             }
             <AppHeader />
             <main className={appStyles.main}>
