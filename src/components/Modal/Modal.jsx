@@ -8,10 +8,14 @@ const modalRoot = document.getElementById('modals');
 
 const Modal = ({ children, onModalClose, type }) => {
     const modalHeightValue = type === 'order' ? '90%' : '70%';
+
+    const closeByEscape = e => {
+        e.code === 'Escape' && onModalClose();
+    };
     
     React.useEffect(() => {
-        document.addEventListener('keydown', e => e.code === 'Escape' && onModalClose());
-        return () => document.removeEventListener('keydown', e => e.code === 'Escape' && onModalClose());
+        document.addEventListener('keydown', closeByEscape);
+        return () => document.removeEventListener('keydown', closeByEscape);
     }, []);
 
     return ReactDOM.createPortal(
