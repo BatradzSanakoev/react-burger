@@ -5,7 +5,9 @@ import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorIte
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const BurgerConstructor = props => {
-    const bun = props.data.find(item => item.type === 'bun');
+    const bun = React.useMemo(() => {
+        return props.data.find(item => item.type === 'bun')
+    }, [props.data]);
     const summaryPrice = () => {
         let sum = 0;
         props.data.forEach(item => {
@@ -13,6 +15,12 @@ const BurgerConstructor = props => {
         });
         return sum + bun.price;
     };
+
+    const handleClick = () => {
+        props.onModalType();
+        props.onModalOpen();
+    };
+
     return (
         <div className={`mt-25 ${burgerConstructor.content}`}>
             <div>
@@ -35,7 +43,7 @@ const BurgerConstructor = props => {
                     <p className={`text text_type_main-medium mr-2 ${burgerConstructor.summaryPriceValue}`}>{summaryPrice()}</p>
                     <CurrencyIcon type='primary' />
                 </div>
-                <button className={`${burgerConstructor.button} pt-5 pr-10 pb-5 pl-10 text text_type_main-medium`}>Оформить заказ</button>
+                <button className={`${burgerConstructor.button} pt-5 pr-10 pb-5 pl-10 text text_type_main-medium`} onClick={handleClick}>Оформить заказ</button>
             </div>
         </div>
     )
