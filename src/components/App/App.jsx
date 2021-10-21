@@ -41,7 +41,7 @@ const App = () => {
     }, []);
 
     React.useEffect(() => {
-        fetch(`${MAIN_API}`)
+        fetch(`${MAIN_API}/ingredients`)
             .then(res => {
                 if (res.ok) return res.json();
             })
@@ -66,8 +66,8 @@ const App = () => {
                 {
                     data ?
                         <div className={appStyles.content}>
-                            <BurgerIngredients data={data} onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} onIngredientProps={handleSetIngredientProps} />
                             <BurgerContext.Provider value={{ data: data, order: orderProps }}>
+                                <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} onIngredientProps={handleSetIngredientProps} />
                                 <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} onOrderProps={handleSetOrderProps} />
                             </BurgerContext.Provider>
                         </div> : <></>

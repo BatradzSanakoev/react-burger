@@ -4,7 +4,7 @@ import burgerConstructor from './BurgerConstructor.module.css';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { BurgerContext } from '../../contexts/BurgerContext';
-import { ORDER_API } from '../../utils/constants';
+import { MAIN_API } from '../../utils/constants';
 
 const BurgerConstructor = props => {
     const { data } = useContext(BurgerContext);
@@ -25,7 +25,7 @@ const BurgerConstructor = props => {
 
     const handleClick = () => {
         const itemsId = notBun.map(item => item._id);
-        fetch(`${ORDER_API}`, {
+        fetch(`${MAIN_API}/orders`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -72,7 +72,8 @@ const BurgerConstructor = props => {
 
 BurgerConstructor.propTypes = {
     onModalOpen: PropTypes.func.isRequired,
-    onModalType: PropTypes.func.isRequired
+    onModalType: PropTypes.func.isRequired,
+    onOrderProps: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;
