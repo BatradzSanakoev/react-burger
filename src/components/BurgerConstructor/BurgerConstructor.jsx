@@ -1,24 +1,47 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import burgerConstructor from './BurgerConstructor.module.css';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { BurgerContext } from '../../contexts/BurgerContext';
+import { MAIN_API } from '../../utils/constants';
 
 const BurgerConstructor = props => {
+    const { data } = useContext(BurgerContext);
     const bun = React.useMemo(() => {
-        return props.data.find(item => item.type === 'bun')
-    }, [props.data]);
+        return data.find(item => item.type === 'bun')
+    }, [data]);
+    const notBun = React.useMemo(() => {
+        return data.filter(item => item.type !== 'bun')
+    }, [data]);
+
     const summaryPrice = () => {
         let sum = 0;
-        props.data.forEach(item => {
+        notBun.forEach(item => {
             if (item.type !== 'bun') sum += item.price;
         });
-        return sum + bun.price;
+        return sum + 2 * bun.price;
     };
 
     const handleClick = () => {
-        props.onModalType();
-        props.onModalOpen();
+        const itemsId = notBun.map(item => item._id);
+        fetch(`${MAIN_API}/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ ingredients: [...itemsId, bun._id] })
+        })
+            .then(res => {
+                if (res.ok) return res.json();
+            })
+            .then(res => {
+                props.onOrderProps({ number: res.order.number });
+                props.onModalType();
+                props.onModalOpen();
+            })
+            .catch(err => console.log(err));
+
     };
 
     return (
@@ -29,9 +52,7 @@ const BurgerConstructor = props => {
                 </div>
                 <div className={`mt-4 pr-2 ${burgerConstructor.list}`}>
                     {
-                        props.data.map(item => (
-                            item.type !== 'bun' && <BurgerConstructorItem key={item._id} image={item.image} name={item.name} price={item.price} />
-                        ))
+                        notBun.map(item => (<BurgerConstructorItem key={item._id} image={item.image} name={item.name} price={item.price} />))
                     }
                 </div>
                 <div className='mt-4'>
@@ -50,7 +71,9 @@ const BurgerConstructor = props => {
 };
 
 BurgerConstructor.propTypes = {
-    data: PropTypes.array.isRequired
+    onModalOpen: PropTypes.func.isRequired,
+    onModalType: PropTypes.func.isRequired,
+    onOrderProps: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;

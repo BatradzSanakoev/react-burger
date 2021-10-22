@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import modal from './Modal.module.css';
 import closeIcon from '../../images/close-icon.png';
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const modalRoot = document.getElementById('modals');
 
@@ -12,7 +13,7 @@ const Modal = ({ children, onModalClose, type }) => {
     const closeByEscape = e => {
         e.code === 'Escape' && onModalClose();
     };
-    
+
     React.useEffect(() => {
         document.addEventListener('keydown', closeByEscape);
         return () => document.removeEventListener('keydown', closeByEscape);
@@ -22,7 +23,7 @@ const Modal = ({ children, onModalClose, type }) => {
         (
             <ModalOverlay onModalClose={onModalClose}>
                 <div className={modal.modal} style={{ height: `${modalHeightValue}` }}>
-                    <img src={closeIcon} alt='close-icon' className={modal.closeIcon} onClick={onModalClose} />
+                    <div className={modal.closeIcon} onClick={onModalClose}><CloseIcon type='primary' /></div>
                     {children}
                 </div>
             </ModalOverlay>
