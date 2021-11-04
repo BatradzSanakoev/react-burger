@@ -1,7 +1,25 @@
+import { GET_CURRENT_INGREDIENT, CLEAR_CURRENT_INGREDIENT_INFO } from "../types";
+
 const initialState = {
-    currentIngredient: {}
+    item: null
 };
 
 export const currentIngredientReducer = (state = initialState, action) => {
-    return state;
+    switch (action.type) {
+        case GET_CURRENT_INGREDIENT: {
+            return {
+                ...state,
+                item: action.payload
+            };
+        }
+        case CLEAR_CURRENT_INGREDIENT_INFO: {
+            return {
+                ...state,
+                item: null
+            };
+        }
+        default: {
+            return state;
+        }
+    }
 };

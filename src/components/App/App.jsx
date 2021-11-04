@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
@@ -8,8 +9,10 @@ import OrderDetails from '../OrderDetails/OrderDetails';
 import appStyles from './App.module.css';
 import { MAIN_API } from '../../utils/constants';
 import { BurgerContext } from '../../contexts/BurgerContext';
+import { getAllIngredients } from '../../services/actions/allIngredients';
 
 const App = () => {
+    const dispatch = useDispatch();
     const [data, setData] = React.useState();
     const [modalDisplay, setModalDisplay] = React.useState(false);
     const [modalType, setModalType] = React.useState();
@@ -41,12 +44,13 @@ const App = () => {
     }, []);
 
     React.useEffect(() => {
-        fetch(`${MAIN_API}`)
+        fetch(`${MAIN_API}/ingredients`)
             .then(res => {
                 if (res.ok) return res.json();
             })
             .then(res => setData(res.data))
             .catch(err => console.log(err));
+        dispatch(getAllIngredients());
     }, []);
 
     return (
@@ -66,8 +70,8 @@ const App = () => {
                 {
                     data ?
                         <div className={appStyles.content}>
-                            <BurgerIngredients data={data} onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} onIngredientProps={handleSetIngredientProps} />
                             <BurgerContext.Provider value={{ data: data, order: orderProps }}>
+                                <BurgerIngredients data={data} onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} onIngredientProps={handleSetIngredientProps} />
                                 <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} onOrderProps={handleSetOrderProps} />
                             </BurgerContext.Provider>
                         </div> : <></>

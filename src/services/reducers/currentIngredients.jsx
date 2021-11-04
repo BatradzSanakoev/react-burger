@@ -1,9 +1,7 @@
 import { GET_CURRENT_INGREDIENTS } from "../types";
 
 const initialState = {
-    items: [],
-    itemsRequest: false,
-    itemsFailed: false
+    items: []
 };
 
 export const currentIngredientsReducer = (state = initialState, action) => {
@@ -11,9 +9,7 @@ export const currentIngredientsReducer = (state = initialState, action) => {
         case GET_CURRENT_INGREDIENTS: {
             return {
                 ...state,
-                items: [state.items, action.payload],
-                itemsRequest: false,
-                itemsFailed: false
+                items: [state.items, action.payload]
             };
         }
         default: {
