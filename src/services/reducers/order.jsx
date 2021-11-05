@@ -1,7 +1,7 @@
-import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED } from "../types";
+import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, CLEAR_ORDER } from "../types";
 
 const initialState = {
-    order: [],
+    orderNumber: null,
     orderRequest: false,
     orderFailed: false
 };
@@ -17,7 +17,7 @@ export const orderReducer = (state = initialState, action) => {
         case GET_ORDER_SUCCESS: {
             return {
                 ...state,
-                order: action.payload,
+                orderNumber: action.payload,
                 orderRequest: false,
                 orderFailed: false
             };
@@ -27,6 +27,14 @@ export const orderReducer = (state = initialState, action) => {
                 ...state,
                 orderRequest: false,
                 orderFailed: true
+            };
+        }
+        case CLEAR_ORDER: {
+            return {
+                ...state,
+                orderNumber: null,
+                orderRequest: false,
+                orderFailed: false
             };
         }
         default: {

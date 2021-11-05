@@ -1,16 +1,16 @@
-import React, { useContext, useRef, useEffect, useState, useMemo } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import burgerIngredients from './BurgerIngredients.module.css';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
-import { BurgerContext } from '../../contexts/BurgerContext';
 
 const BurgerIngredients = props => {
+    const data = useSelector(state => state.allIngredients.items);
     const tabsRef = useRef();
     const bunsRef = useRef();
     const saucesRef = useRef();
     const mainsRef = useRef();
-    const { data } = useContext(BurgerContext);
     const [currentTab, setCurrentTab] = useState('bun');
     const buns = useMemo(() => {
         return data.filter(item => item.type === 'bun');
@@ -39,32 +39,34 @@ const BurgerIngredients = props => {
                 <Tab value='sauce' active={currentTab === 'sauce'}>Соусы</Tab>
                 <Tab value='main' active={currentTab === 'main'}>Начинка</Tab>
             </div>
-            <div className={burgerIngredients.categories} onScroll={checkActualTab}>
-                <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>Булки</h2>
-                <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={bunsRef}>
-                    {
-                        buns.map(item => (
-                            <BurgerIngredient key={item._id} image={item.image_large} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
-                        ))
-                    }
-                </div>
-                <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>Соусы</h2>
-                <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={saucesRef}>
-                    {
-                        sauces.map(item => (
-                            <BurgerIngredient key={item._id} image={item.image_large} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
-                        ))
-                    }
-                </div>
-                <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>Начинка</h2>
-                <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={mainsRef}>
-                    {
-                        main.map(item => (
-                            <BurgerIngredient key={item._id} image={item.image_large} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
-                        ))
-                    }
-                </div>
-            </div>
+            {data.length > 0 ?
+                (<div className={burgerIngredients.categories} onScroll={checkActualTab}>
+                    <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>Булки</h2>
+                    <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={bunsRef}>
+                        {
+                            buns.map(item => (
+                                <BurgerIngredient key={item._id} image={item.image_large} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
+                            ))
+                        }
+                    </div>
+                    <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>Соусы</h2>
+                    <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={saucesRef}>
+                        {
+                            sauces.map(item => (
+                                <BurgerIngredient key={item._id} image={item.image_large} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
+                            ))
+                        }
+                    </div>
+                    <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>Начинка</h2>
+                    <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={mainsRef}>
+                        {
+                            main.map(item => (
+                                <BurgerIngredient key={item._id} image={item.image_large} price={item.price} name={item.name} proteins={item.proteins} fat={item.fat} carbohydrates={item.carbohydrates} calories={item.calories} onModalOpen={props.onModalOpen} onModalType={props.onModalType} onIngredientProps={props.onIngredientProps} />
+                            ))
+                        }
+                    </div>
+                </div>)
+                : <></>}
         </div>
     )
 };

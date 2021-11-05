@@ -7,13 +7,11 @@ import Modal from '../Modal/Modal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import OrderDetails from '../OrderDetails/OrderDetails';
 import appStyles from './App.module.css';
-import { MAIN_API } from '../../utils/constants';
-import { BurgerContext } from '../../contexts/BurgerContext';
 import { getAllIngredients } from '../../services/actions/allIngredients';
+import { clearOrder } from '../../services/actions/order';
 
 const App = () => {
     const dispatch = useDispatch();
-    const [data, setData] = React.useState();
     const [modalDisplay, setModalDisplay] = React.useState(false);
     const [modalType, setModalType] = React.useState();
     const [ingredientProps, setIngredientProps] = React.useState([]);
@@ -24,6 +22,7 @@ const App = () => {
     }, []);
 
     const handleCloseModal = React.useCallback(() => {
+        if (modalType === 'order') dispatch(clearOrder());
         setModalDisplay(false);
     }, []);
 
@@ -44,12 +43,6 @@ const App = () => {
     }, []);
 
     React.useEffect(() => {
-        fetch(`${MAIN_API}/ingredients`)
-            .then(res => {
-                if (res.ok) return res.json();
-            })
-            .then(res => setData(res.data))
-            .catch(err => console.log(err));
         dispatch(getAllIngredients());
     }, []);
 
@@ -60,22 +53,17 @@ const App = () => {
                 <Modal onModalClose={handleCloseModal} type={modalType}>
                     {
                         modalType === 'order'
-                            ? <OrderDetails number={orderProps.number} />
+                            ? <OrderDetails />
                             : <IngredientDetails {...ingredientProps} />
                     }
                 </Modal>
             }
             <AppHeader />
             <main className={appStyles.main}>
-                {
-                    data ?
-                        <div className={appStyles.content}>
-                            <BurgerContext.Provider value={{ data: data, order: orderProps }}>
-                                <BurgerIngredients data={data} onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} onIngredientProps={handleSetIngredientProps} />
-                                <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} onOrderProps={handleSetOrderProps} />
-                            </BurgerContext.Provider>
-                        </div> : <></>
-                }
+                <div className={appStyles.content}>
+                    <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} onIngredientProps={handleSetIngredientProps} />
+                    <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} onOrderProps={handleSetOrderProps} />
+                </div>
             </main>
         </>
     )
