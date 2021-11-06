@@ -23,14 +23,14 @@
 .itemDataBunTop {
     composes: itemData;
     margin-right: 15px;
-    width: 83%;
+    width: 90%;
     border-radius: 88px 88px 40px 40px;
 }
 
 .itemDataBunBottom {
     composes: itemData;
     margin-right: 15px;
-    width: 83%;
+    width: 90%;
     border-radius: 40px 40px 88px 88px;
 }
 

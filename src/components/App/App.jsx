@@ -1,5 +1,7 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
@@ -7,23 +9,23 @@ import Modal from '../Modal/Modal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import OrderDetails from '../OrderDetails/OrderDetails';
 import appStyles from './App.module.css';
-import { getAllIngredients } from '../../services/actions/allIngredients';
+import { getBurgerIngredients } from '../../services/actions/burgerIngredients';
 import { clearOrder } from '../../services/actions/order';
+import { clearBurgerIngredientInfo } from '../../services/actions/burgerIngredient';
 
 const App = () => {
     const dispatch = useDispatch();
     const [modalDisplay, setModalDisplay] = React.useState(false);
     const [modalType, setModalType] = React.useState();
-    const [ingredientProps, setIngredientProps] = React.useState([]);
-    const [orderProps, setOrderProps] = React.useState([]);
 
     const handleOpenModal = React.useCallback(() => {
         setModalDisplay(true);
     }, []);
 
     const handleCloseModal = React.useCallback(() => {
-        if (modalType === 'order') dispatch(clearOrder());
         setModalDisplay(false);
+        dispatch(clearOrder());
+        dispatch(clearBurgerIngredientInfo());
     }, []);
 
     const handleSetIngredientType = React.useCallback(() => {
@@ -34,16 +36,8 @@ const App = () => {
         setModalType('order');
     }, []);
 
-    const handleSetIngredientProps = React.useCallback(props => {
-        setIngredientProps({ ...ingredientProps, image: props.image, name: props.name, proteins: props.proteins, fat: props.fat, carbohydrates: props.carbohydrates, calories: props.calories });
-    }, []);
-
-    const handleSetOrderProps = React.useCallback(props => {
-        setOrderProps({ ...orderProps, number: props.number });
-    }, []);
-
     React.useEffect(() => {
-        dispatch(getAllIngredients());
+        dispatch(getBurgerIngredients());
     }, []);
 
     return (
@@ -54,15 +48,17 @@ const App = () => {
                     {
                         modalType === 'order'
                             ? <OrderDetails />
-                            : <IngredientDetails {...ingredientProps} />
+                            : <IngredientDetails />
                     }
                 </Modal>
             }
             <AppHeader />
             <main className={appStyles.main}>
                 <div className={appStyles.content}>
-                    <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} onIngredientProps={handleSetIngredientProps} />
-                    <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} onOrderProps={handleSetOrderProps} />
+                    <DndProvider backend={HTML5Backend}>
+                        <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} />
+                        <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} />
+                    </DndProvider>
                 </div>
             </main>
         </>

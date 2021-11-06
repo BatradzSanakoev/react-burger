@@ -1,65 +1,77 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useDrop } from 'react-dnd';
 import PropTypes from 'prop-types';
 import burgerConstructor from './BurgerConstructor.module.css';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { getOrder } from '../../services/actions/order';
+import { addConstructorIngredient, increaseConstructorCount, decreaseConstructorCount, addConstructorBun } from '../../services/actions/burgerConstructor';
 
 const BurgerConstructor = props => {
     const dispatch = useDispatch();
-    const data = useSelector(state => state.allIngredients.items);
-    const bun = useMemo(() => {
-        return data.find(item => item.type === 'bun')
-    }, [data]);
-    const notBun = useMemo(() => {
-        return data.filter(item => item.type !== 'bun')
-    }, [data]);
-
-    const summaryPrice = () => {
+    const { constructorBuns, constructorIngredients } = useSelector(state => state.burgerConstructor);
+    const summaryPrice = useMemo(() => {
         let sum = 0;
-        notBun.forEach(item => {
+        constructorIngredients.forEach(item => {
             if (item.type !== 'bun') sum += item.price;
         });
-        return sum + 2 * bun.price;
-    };
+        return constructorBuns ? sum + 2 * constructorBuns.price : sum;
+    }, [constructorBuns, constructorIngredients]);
 
     const handleClick = () => {
-        const itemsId = notBun.map(item => item._id);
-        dispatch(getOrder([...itemsId, bun._id]));
+        const itemsId = constructorIngredients.map(item => item._id);
+        dispatch(getOrder([...itemsId, constructorBuns._id]));
         props.onModalType();
         props.onModalOpen();
     };
 
+    const [{ isHover }, dropRef] = useDrop({
+        accept: 'ingredient',
+        collect: monitor => ({
+            isHover: monitor.isOver()
+        }),
+        drop: item => {
+            if (item.type === 'bun') dispatch(addConstructorBun(item));
+            else dispatch(addConstructorIngredient(item));
+            if (constructorBuns && item.type === 'bun') {
+                dispatch(decreaseConstructorCount());
+                dispatch(increaseConstructorCount());
+            } else dispatch(increaseConstructorCount());
+        }
+    });
+
     return (
-        <>
-            {
-                data.length > 0 ?
-                    (<div className={`mt-25 ${burgerConstructor.content}`}>
-                        <div>
+        <div className={`mt-25 ${burgerConstructor.content}`}>
+            <div style={{ border: `${isHover ? '2px solid #4c4cff' : ''}`, borderRadius: 40 }} ref={dropRef}>
+                {
+                    constructorBuns || constructorIngredients.length > 0 ?
+                        (<div>
                             <div>
-                                <BurgerConstructorItem key={bun._id} image={bun.image} name={bun.name} price={bun.price} type='bun-top' />
+                                {constructorBuns ? <BurgerConstructorItem key={constructorBuns.key} uniqueKey={constructorBuns.key} image={constructorBuns.image} name={constructorBuns.name} price={constructorBuns.price} type='bun-top' /> : <h2 className='text text_type_main-medium'>Добавьте булку</h2>}
                             </div>
                             <div className={`mt-4 pr-2 ${burgerConstructor.list}`}>
                                 {
-                                    notBun.map(item => (<BurgerConstructorItem key={item._id} image={item.image} name={item.name} price={item.price} />))
+                                    constructorIngredients.map((item, index) => (<BurgerConstructorItem key={item.key} index={index} uniqueKey={item.key} image={item.image} name={item.name} price={item.price} />))
                                 }
                             </div>
                             <div className='mt-4'>
-                                <BurgerConstructorItem key={bun._id} image={bun.image} name={bun.name} price={bun.price} type='bun-bottom' />
+                                {constructorBuns ? <BurgerConstructorItem key={constructorBuns.key} uniqueKey={constructorBuns.key} image={constructorBuns.image} name={constructorBuns.name} price={constructorBuns.price} type='bun-bottom' /> : <h2 className='text text_type_main-medium'>Добавьте булку</h2>}
                             </div>
-                        </div>
-                        <div className={`${burgerConstructor.summary} mt-10`}>
-                            <div className={`${burgerConstructor.summaryPrice} mr-10`}>
-                                <p className={`text text_type_main-medium mr-2 ${burgerConstructor.summaryPriceValue}`}>{summaryPrice()}</p>
-                                <CurrencyIcon type='primary' />
-                            </div>
-                            <button className={`${burgerConstructor.button} pt-5 pr-10 pb-5 pl-10 text text_type_main-medium`} onClick={handleClick}>Оформить заказ</button>
-                        </div>
-                    </div>)
-                    : <></>
-            }
-        </>
+                        </div>)
+                        : (<div style={{ height: '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <h2 className={`text text_type_main-large`}>Конструктор пуст</h2>
+                        </div>)
+                }
+            </div>
+            <div className={`${burgerConstructor.summary} mt-10`}>
+                <div className={`${burgerConstructor.summaryPrice} mr-10`}>
+                    <p className={`text text_type_main-medium mr-2 ${burgerConstructor.summaryPriceValue}`}>{constructorBuns || constructorIngredients.length > 0 ? summaryPrice : 0}</p>
+                    <CurrencyIcon type='primary' />
+                </div>
+                <button className={`${burgerConstructor.button} pt-5 pr-10 pb-5 pl-10 text text_type_main-medium`} onClick={handleClick} disabled={!constructorBuns}>Оформить заказ</button>
+            </div>
+        </div>
     )
 };
 
