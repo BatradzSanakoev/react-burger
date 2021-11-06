@@ -14,7 +14,6 @@ import { clearOrder } from '../../services/actions/order';
 import { clearBurgerIngredientInfo } from '../../services/actions/burgerIngredient';
 
 const App = () => {
-    //test
     const dispatch = useDispatch();
     const [modalDisplay, setModalDisplay] = React.useState(false);
     const [modalType, setModalType] = React.useState();
