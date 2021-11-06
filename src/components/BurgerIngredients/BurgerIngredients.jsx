@@ -4,6 +4,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import burgerIngredients from './BurgerIngredients.module.css';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
+import { BurgerContext } from '../../contexts/BurgerContext';
 
 const BurgerIngredients = props => {
     const data = useSelector(state => state.burgerIngredients.ingredients);

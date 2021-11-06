@@ -8,6 +8,7 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { getOrder } from '../../services/actions/order';
 import { addConstructorIngredient, increaseConstructorCount, decreaseConstructorCount, addConstructorBun } from '../../services/actions/burgerConstructor';
 
+
 const BurgerConstructor = props => {
     const dispatch = useDispatch();
     const { constructorBuns, constructorIngredients } = useSelector(state => state.burgerConstructor);
@@ -77,7 +78,8 @@ const BurgerConstructor = props => {
 
 BurgerConstructor.propTypes = {
     onModalOpen: PropTypes.func.isRequired,
-    onModalType: PropTypes.func.isRequired
+    onModalType: PropTypes.func.isRequired,
+    onOrderProps: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;
