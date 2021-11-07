@@ -78,8 +78,7 @@ const BurgerConstructor = props => {
 
 BurgerConstructor.propTypes = {
     onModalOpen: PropTypes.func.isRequired,
-    onModalType: PropTypes.func.isRequired,
-    onOrderProps: PropTypes.func.isRequired
+    onModalType: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;
