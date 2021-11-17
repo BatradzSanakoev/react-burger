@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
@@ -12,6 +13,7 @@ import appStyles from './App.module.css';
 import { getBurgerIngredients } from '../../services/actions/burgerIngredients';
 import { clearOrder } from '../../services/actions/order';
 import { clearBurgerIngredientInfo } from '../../services/actions/burgerIngredient';
+import { Login } from '../../pages/Login/Login';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -41,22 +43,29 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <BrowserRouter>
       {modalDisplay && (
         <Modal onModalClose={handleCloseModal} type={modalType}>
           {modalType === 'order' ? <OrderDetails /> : <IngredientDetails />}
         </Modal>
       )}
       <AppHeader />
-      <main className={appStyles.main}>
-        <div className={appStyles.content}>
-          <DndProvider backend={HTML5Backend}>
-            <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} />
-            <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} />
-          </DndProvider>
-        </div>
-      </main>
-    </>
+      <Switch>
+        <Route path='/' exact>
+          <main className={appStyles.main}>
+            <div className={appStyles.content}>
+              <DndProvider backend={HTML5Backend}>
+                <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} />
+                <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} />
+              </DndProvider>
+            </div>
+          </main>
+        </Route>
+        <Route path='/login' exact>
+          <Login />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 };
 
