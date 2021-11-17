@@ -14,56 +14,50 @@ import { clearOrder } from '../../services/actions/order';
 import { clearBurgerIngredientInfo } from '../../services/actions/burgerIngredient';
 
 const App = () => {
-    const dispatch = useDispatch();
-    const [modalDisplay, setModalDisplay] = React.useState(false);
-    const [modalType, setModalType] = React.useState();
+  const dispatch = useDispatch();
+  const [modalDisplay, setModalDisplay] = React.useState(false);
+  const [modalType, setModalType] = React.useState();
 
-    const handleOpenModal = React.useCallback(() => {
-        setModalDisplay(true);
-    }, []);
+  const handleOpenModal = React.useCallback(() => {
+    setModalDisplay(true);
+  }, []);
 
-    const handleCloseModal = React.useCallback(() => {
-        setModalDisplay(false);
-        dispatch(clearOrder());
-        dispatch(clearBurgerIngredientInfo());
-    }, []);
+  const handleCloseModal = React.useCallback(() => {
+    setModalDisplay(false);
+    dispatch(clearOrder());
+    dispatch(clearBurgerIngredientInfo());
+  }, []);
 
-    const handleSetIngredientType = React.useCallback(() => {
-        setModalType('ingredient');
-    }, []);
+  const handleSetIngredientType = React.useCallback(() => {
+    setModalType('ingredient');
+  }, []);
 
-    const handleSetOrderType = React.useCallback(() => {
-        setModalType('order');
-    }, []);
+  const handleSetOrderType = React.useCallback(() => {
+    setModalType('order');
+  }, []);
 
-    React.useEffect(() => {
-        dispatch(getBurgerIngredients());
-    }, []);
+  React.useEffect(() => {
+    dispatch(getBurgerIngredients());
+  }, []);
 
-    return (
-        <>
-            {
-                modalDisplay &&
-                <Modal onModalClose={handleCloseModal} type={modalType}>
-                    {
-                        modalType === 'order'
-                            ? <OrderDetails />
-                            : <IngredientDetails />
-                    }
-                </Modal>
-            }
-            <AppHeader />
-            <main className={appStyles.main}>
-                <div className={appStyles.content}>
-                    <DndProvider backend={HTML5Backend}>
-                        <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} />
-                        <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} />
-                    </DndProvider>
-                </div>
-            </main>
-        </>
-    )
+  return (
+    <>
+      {modalDisplay && (
+        <Modal onModalClose={handleCloseModal} type={modalType}>
+          {modalType === 'order' ? <OrderDetails /> : <IngredientDetails />}
+        </Modal>
+      )}
+      <AppHeader />
+      <main className={appStyles.main}>
+        <div className={appStyles.content}>
+          <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} />
+            <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} />
+          </DndProvider>
+        </div>
+      </main>
+    </>
+  );
 };
 
 export default App;
-
