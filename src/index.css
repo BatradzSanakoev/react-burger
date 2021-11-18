@@ -1,0 +1,11 @@
+.input__container {
+    margin-top: 16px;
+}
+
+.input__container .input__error {
+    margin-bottom: 0;
+}
+
+.input__container .input_size_default {
+    width: 430px;
+}

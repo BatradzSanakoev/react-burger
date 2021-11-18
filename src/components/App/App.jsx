@@ -14,6 +14,9 @@ import { getBurgerIngredients } from '../../services/actions/burgerIngredients';
 import { clearOrder } from '../../services/actions/order';
 import { clearBurgerIngredientInfo } from '../../services/actions/burgerIngredient';
 import { Login } from '../../pages/Login/Login';
+import { Register } from '../../pages/Register/Register';
+import { ForgotPassword } from '../../pages/ForgotPassword/ForgotPassword';
+import { ResetPassword } from '../../pages/ResetPassword/ResetPassword';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -63,6 +66,15 @@ const App = () => {
         </Route>
         <Route path='/login' exact>
           <Login />
+        </Route>
+        <Route path='/register' exact>
+          <Register />
+        </Route>
+        <Route path='/forgot-password' exact>
+          <ForgotPassword />
+        </Route>
+        <Route path='/reset-password' exact>
+          <ResetPassword />
         </Route>
       </Switch>
     </BrowserRouter>

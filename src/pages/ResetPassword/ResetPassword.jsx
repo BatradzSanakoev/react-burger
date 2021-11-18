@@ -1,0 +1,85 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import resetPassword from './ResetPassword.module.css';
+import { MAIN_API } from '../../utils/constants';
+
+export const ResetPassword = () => {
+  const history = useHistory();
+  const [showPassword, setShowPassword] = useState(false);
+  const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onChange = e => {
+    const target = e.target;
+    target.name === 'code' ? setCode(target.value) : setPassword(target.value);
+  };
+
+  const onIconClick = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const onSubmit = e => {
+    e.preventDefault();
+    fetch(`${MAIN_API}/password-reset/reset`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({ password: password, token: code })
+    })
+      .then(res => {
+        if (res.ok) return res.json();
+        else alert('ERROR');
+      })
+      .then(res => {
+        if (res.success) history.push('/login');
+        else alert('ERROR');
+      })
+      .catch(err => alert(err));
+  };
+
+  return (
+    <section className={resetPassword.section}>
+      <div className={resetPassword.content}>
+        <form onSubmit={onSubmit} noValidate className={resetPassword.form}>
+          <h2 className='text text_type_main-large'>Восстановление пароля</h2>
+          <div className={showPassword ? resetPassword.hideInput : ''}>
+            <Input
+              type='password'
+              placeholder='Введите новый пароль'
+              name='password'
+              value={password || ''}
+              icon='ShowIcon'
+              onChange={onChange}
+              onIconClick={onIconClick}
+            />
+          </div>
+          <div className={!showPassword ? resetPassword.hideInput : ''}>
+            <Input
+              type='text'
+              placeholder='Введите новый пароль'
+              name='password'
+              value={password || ''}
+              icon='HideIcon'
+              onChange={onChange}
+              onIconClick={onIconClick}
+            />
+          </div>
+          <Input type='text' placeholder='Введите код из письма' name='code' value={code || ''} onChange={onChange} />
+          <button type='submit' className={`${resetPassword.button} mt-4 p-4 text text_type_main-medium`} disabled={!password || !code}>
+            Восстановить
+          </button>
+        </form>
+        <div>
+          <div className='text text_type_main-default text_color_inactive'>
+            <span>Вспомнили пароль?</span>
+            <Link to='/login' className={`${resetPassword.link} ml-2`}>
+              Войти
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
