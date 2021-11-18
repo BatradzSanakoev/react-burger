@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import resetPassword from './ResetPassword.module.css';
@@ -9,6 +9,7 @@ export const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
+  const passwordRef = useRef();
 
   const onChange = e => {
     const target = e.target;
@@ -17,6 +18,11 @@ export const ResetPassword = () => {
 
   const onIconClick = () => {
     setShowPassword(!showPassword);
+    if (!showPassword) setTimeout(() => passwordRef.current.focus(), 0); //passwordRef.current.focus();
+  };
+
+  const handlePasswordOverlayClick = e => {
+    if (showPassword && e.currentTarget.classList.value !== 'input__icon input__icon-action') setShowPassword(!showPassword);
   };
 
   const onSubmit = e => {
@@ -40,7 +46,7 @@ export const ResetPassword = () => {
   };
 
   return (
-    <section className={resetPassword.section}>
+    <section className={resetPassword.section} onClick={handlePasswordOverlayClick}>
       <div className={resetPassword.content}>
         <form onSubmit={onSubmit} noValidate className={resetPassword.form}>
           <h2 className='text text_type_main-large'>Восстановление пароля</h2>
@@ -53,6 +59,7 @@ export const ResetPassword = () => {
               icon='ShowIcon'
               onChange={onChange}
               onIconClick={onIconClick}
+            //   ref={passwordRef}
             />
           </div>
           <div className={!showPassword ? resetPassword.hideInput : ''}>
@@ -64,6 +71,7 @@ export const ResetPassword = () => {
               icon='HideIcon'
               onChange={onChange}
               onIconClick={onIconClick}
+              ref={passwordRef}
             />
           </div>
           <Input type='text' placeholder='Введите код из письма' name='code' value={code || ''} onChange={onChange} />
