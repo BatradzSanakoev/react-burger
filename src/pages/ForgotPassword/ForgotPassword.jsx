@@ -38,7 +38,7 @@ export const ForgotPassword = () => {
   useEffect(() => (email.length > 0 && !email.match(emailRegex) ? setEmailError(true) : setEmailError(false)), [email]);
 
   return (
-    <section className={forgotPassword.section}>
+    <main className={forgotPassword.section}>
       <div className={forgotPassword.content}>
         <form onSubmit={onSubmit} noValidate className={forgotPassword.form}>
           <h2 className='text text_type_main-large'>Восстановление пароля</h2>
@@ -64,6 +64,6 @@ export const ForgotPassword = () => {
           </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 };

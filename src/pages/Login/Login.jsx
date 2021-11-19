@@ -13,7 +13,7 @@ export const Login = () => {
   };
 
   return (
-    <section className={login.section}>
+    <main className={login.section}>
       <div className={login.content}>
         <form onSubmit={e => e.preventDefault()} noValidate className={login.form}>
           <h2 className='text text_type_main-large'>Вход</h2>
@@ -38,6 +38,6 @@ export const Login = () => {
           </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 };

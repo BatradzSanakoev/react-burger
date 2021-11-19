@@ -46,7 +46,7 @@ export const ResetPassword = () => {
   };
 
   return (
-    <section className={resetPassword.section} onClick={handlePasswordOverlayClick}>
+    <main className={resetPassword.section} onClick={handlePasswordOverlayClick}>
       <div className={resetPassword.content}>
         <form onSubmit={onSubmit} noValidate className={resetPassword.form}>
           <h2 className='text text_type_main-large'>Восстановление пароля</h2>
@@ -88,6 +88,6 @@ export const ResetPassword = () => {
           </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 };

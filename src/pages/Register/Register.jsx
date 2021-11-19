@@ -40,7 +40,7 @@ export const Register = () => {
   useEffect(() => (email.length > 0 && !email.match(emailRegex) ? setEmailError(true) : setEmailError(false)), [email]);
 
   return (
-    <section className={register.section}>
+    <main className={register.section}>
       <div className={register.content}>
         <form onSubmit={onSubmit} noValidate className={register.form}>
           <h2 className='text text_type_main-large'>Регистрация</h2>
@@ -60,6 +60,6 @@ export const Register = () => {
           </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 };
