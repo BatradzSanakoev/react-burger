@@ -2,7 +2,6 @@ import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, CLEAR_ORDER } f
 import { MAIN_API } from '../../utils/constants';
 
 export const getOrder = itemsId => {
-  console.log(itemsId);
   return dispatch => {
     dispatch({
       type: GET_ORDER_REQUEST
