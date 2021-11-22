@@ -17,6 +17,40 @@ import {
 } from '../types';
 import { MAIN_API } from '../../utils/constants';
 
+const getCookie = name => {
+  const cookies = document.cookie.split('; ');
+  if (!cookies) return;
+  const token = cookies.find(cookie => (cookie.indexOf(name) !== -1 ? cookie : null));
+  return name === 'accessToken' ? token.slice(12) : token.slice(13);
+};
+
+const setCookies = data => {
+  document.cookie = `accessToken=${data.accessToken.slice(7)}`;
+  document.cookie = `refreshToken=${data.refreshToken}`;
+};
+
+const retriableFetch = async (url, options = {}) => {
+  try {
+    return await fetch(url, options).then(res => {
+      if (res.ok) return res.json();
+      else return res.json().then(err => Promise.reject(err));
+    });
+  } catch (err) {
+    if (err.message === 'jwt expired') {
+      const refreshTokens = await refresh();
+      setCookies(refreshTokens);
+      if (!options.headers) {
+        options.headers = {};
+      }
+      options.headers.authorization = getCookie('refreshToken');
+      return await fetch(url, options).then(res => {
+        if (res.ok) return res.json();
+        else return res.json().then(err => Promise.reject(err));
+      });
+    } else throw err;
+  }
+};
+
 export const register = ({ email, password, name, history }) => {
   return dispatch => {
     dispatch({
@@ -31,13 +65,13 @@ export const register = ({ email, password, name, history }) => {
     })
       .then(res => {
         if (res.ok) return res.json();
-        else dispatch({ type: REGISTER_FAILED });
+        else return res.json().then(err => Promise.reject(err));
       })
       .then(res => {
         if (res.success) {
           dispatch({ type: REGISTER_SUCCESS });
           history.push('/login');
-        } else dispatch({ type: REGISTER_FAILED });
+        } else Promise.reject(res);
       })
       .catch(() => dispatch({ type: REGISTER_FAILED }));
   };
@@ -55,52 +89,35 @@ export const login = ({ email, password, history }) => {
     })
       .then(res => {
         if (res.ok) return res.json();
-        else dispatch({ type: AUTH_FAILED });
+        else return res.json().then(err => Promise.reject(err));
       })
       .then(res => {
         if (res.success) {
-          document.cookie = `accessToken=${res.accessToken.slice(7)}`;
-          document.cookie = `refreshToken=${res.refreshToken}`;
+          setCookies(res);
           dispatch({ type: AUTH_SUCCESS });
           history.push('/');
-        } else dispatch({ type: AUTH_FAILED });
+        } else Promise.reject(res);
       })
       .catch(() => dispatch({ type: AUTH_FAILED }));
   };
 };
 
 export const refresh = () => {
-  const refreshToken = document.cookie.split('; ').map(item => {
-    if (item.indexOf('refreshToken') !== -1) return item;
+  const refreshToken = getCookie('refreshToken');
+  return fetch(`${MAIN_API}/auth/token`, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({ token: `${refreshToken}` })
+  }).then(res => {
+    if (res.ok) return res.json();
+    else return res.json().then(err => Promise.reject(err));
   });
-  return dispatch => {
-    dispatch({ type: TOKEN_REQUEST });
-    fetch(`${MAIN_API}/auth/token`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({ token: `{{${refreshToken}}}` })
-    })
-      .then(res => {
-        if (res.ok) return res.json();
-        else dispatch({ type: TOKEN_FAILED });
-      })
-      .then(res => {
-        if (res.success) {
-          document.cookie = `accessToken=${res.accessToken.slice(7)}`;
-          document.cookie = `refreshToken=${res.refreshToken}`;
-          dispatch({ type: TOKEN_SUCCESS });
-        } else dispatch({ type: TOKEN_FAILED });
-      })
-      .catch(() => dispatch({ type: TOKEN_FAILED }));
-  };
 };
 
 export const logout = () => {
-  const refreshToken = document.cookie.split('; ').map(item => {
-    if (item.indexOf('refreshToken') !== -1) return item;
-  });
+  const refreshToken = getCookie('refreshToken');
   return dispatch => {
     dispatch({ type: LOGOUT_REQUEST });
     fetch(`${MAIN_API}/auth/logout`, {
@@ -108,41 +125,38 @@ export const logout = () => {
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({ token: `{{${refreshToken}}}` })
+      body: JSON.stringify({ token: `${refreshToken}` })
     })
       .then(res => {
         if (res.ok) return res.json();
-        else dispatch({ type: LOGOUT_FAILED });
+        else return res.json().then(err => Promise.reject(err));
       })
       .then(res => {
         if (res.success) dispatch({ type: LOGOUT_SUCCESS });
-        else dispatch({ type: LOGOUT_FAILED });
+        else Promise.reject(res);
       })
       .catch(() => dispatch({ type: LOGOUT_FAILED }));
   };
 };
 
 export const getUser = () => {
-  const accessToken = document.cookie.split('; ').find(item => {
-    if (item.indexOf('accessToken') !== -1) return item;
-  });
-  console.log(accessToken.slice(12))
+  const accessToken = getCookie('accessToken');
   return dispatch => {
     dispatch({ type: GET_USER_REQUEST });
-    fetch(`${MAIN_API}/auth/user`, {
+    retriableFetch(`${MAIN_API}/auth/user`, {
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer ${accessToken.slice(12)}`
+        Authorization: `Bearer ${accessToken}`
       }
     })
       .then(res => {
-        if (res.ok) return res.json();
-        else dispatch({ type: GET_USER_FAILED });
-      })
-      .then(res => {
+        console.log(res);
         if (res.success) dispatch({ type: GET_USER_SUCCESS, payload: res.user });
-        else dispatch({ type: GET_USER_FAILED });
+        else Promise.reject(res);
       })
-      .catch(() => dispatch({ type: GET_USER_FAILED }));
+      .catch(err => {
+        console.log(err);
+        dispatch({ type: GET_USER_FAILED });
+      });
   };
 };
