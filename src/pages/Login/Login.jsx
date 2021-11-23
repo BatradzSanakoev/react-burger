@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory, Redirect } from 'react-router-dom';
+import { Link, useHistory, Redirect, useLocation } from 'react-router-dom';
 import { PasswordInput, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import loginStyles from './Login.module.css';
@@ -7,6 +7,7 @@ import { login } from '../../services/actions/user';
 
 export const Login = () => {
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { isAuth } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
@@ -23,7 +24,7 @@ export const Login = () => {
   };
 
   if (isAuth) {
-    return <Redirect to={{ pathname: state?.from || '/' }} />;
+    return <Redirect to={lcoation.state?.from || '/'} />;
   }
 
   return (
