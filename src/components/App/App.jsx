@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, useHistory } from 'react-router-dom';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
@@ -18,9 +18,12 @@ import { Register } from '../../pages/Register/Register';
 import { ForgotPassword } from '../../pages/ForgotPassword/ForgotPassword';
 import { ResetPassword } from '../../pages/ResetPassword/ResetPassword';
 import { Profile } from '../../pages/Profile/Profile';
+import { getUser, getCookie } from '../../services/actions/user';
+import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 
 const App = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [modalDisplay, setModalDisplay] = React.useState(false);
   const [modalType, setModalType] = React.useState();
 
@@ -43,6 +46,7 @@ const App = () => {
   }, []);
 
   React.useEffect(() => {
+    if (getCookie('accessToken')) dispatch(getUser());
     dispatch(getBurgerIngredients());
   }, []);
 
@@ -77,9 +81,9 @@ const App = () => {
         <Route path='/reset-password' exact>
           <ResetPassword />
         </Route>
-        <Route path='/profile' exact>
+        <ProtectedRoute path='/profile'>
           <Profile />
-        </Route>
+        </ProtectedRoute>
       </Switch>
     </BrowserRouter>
   );

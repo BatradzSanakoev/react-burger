@@ -8,19 +8,19 @@ import {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILED,
-  TOKEN_REQUEST,
-  TOKEN_SUCCESS,
-  TOKEN_FAILED,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
-  GET_USER_FAILED
+  GET_USER_FAILED,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAILED
 } from '../types';
 import { MAIN_API } from '../../utils/constants';
 
-const getCookie = name => {
+export const getCookie = name => {
   const cookies = document.cookie.split('; ');
-  if (!cookies) return;
   const token = cookies.find(cookie => (cookie.indexOf(name) !== -1 ? cookie : null));
+  if (token === undefined) return;
   return name === 'accessToken' ? token.slice(12) : token.slice(13);
 };
 
@@ -95,6 +95,7 @@ export const login = ({ email, password, history }) => {
         if (res.success) {
           setCookies(res);
           dispatch({ type: AUTH_SUCCESS });
+          // dispatch(getUser());
           history.push('/');
         } else Promise.reject(res);
       })
@@ -150,13 +151,29 @@ export const getUser = () => {
       }
     })
       .then(res => {
-        console.log(res);
         if (res.success) dispatch({ type: GET_USER_SUCCESS, payload: res.user });
         else Promise.reject(res);
       })
-      .catch(err => {
-        console.log(err);
-        dispatch({ type: GET_USER_FAILED });
-      });
+      .catch(() => dispatch({ type: GET_USER_FAILED }));
+  };
+};
+
+export const updateUser = ({ email, password, name }) => {
+  const accessToken = getCookie('accessToken');
+  return dispatch => {
+    dispatch({ type: USER_UPDATE_REQUEST });
+    retriableFetch(`${MAIN_API}/auth/user`, {
+      method: 'PATCH',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({ email: email, password: password, name: name })
+    })
+      .then(res => {
+        if (res.success) dispatch({ type: USER_UPDATE_SUCCESS, payload: res.user });
+        else Promise.reject(res);
+      })
+      .catch(() => dispatch({ type: USER_UPDATE_FAILED }));
   };
 };

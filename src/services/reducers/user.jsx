@@ -8,12 +8,12 @@ import {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILED,
-  TOKEN_REQUEST,
-  TOKEN_SUCCESS,
-  TOKEN_FAILED,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
-  GET_USER_FAILED
+  GET_USER_FAILED,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAILED
 } from '../types';
 
 const initialState = {
@@ -23,11 +23,13 @@ const initialState = {
   authError: false,
   logoutRequest: false,
   logoutError: false,
-  tokenRequest: false,
-  tokenError: false,
   errorText: null,
   getUserRequest: false,
   getUserError: false,
+  getUserLoaded: false,
+  userUpdateRequest: false,
+  userUpdateError: false,
+  isAuth: false,
   user: {}
 };
 
@@ -75,27 +77,6 @@ export const userReducer = (state = initialState, action) => {
         errorText: 'Ошибка при авторизации'
       };
     }
-    case TOKEN_REQUEST: {
-      return {
-        ...state,
-        tokenRequest: true
-      };
-    }
-    case TOKEN_SUCCESS: {
-      return {
-        ...state,
-        tokenRequest: false,
-        tokenError: false
-      };
-    }
-    case TOKEN_FAILED: {
-      return {
-        ...state,
-        tokenRequest: false,
-        tokenError: true,
-        errorText: 'Ошибка при обновлении токена'
-      };
-    }
     case LOGOUT_REQUEST: {
       return {
         ...state,
@@ -107,6 +88,7 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         logoutRequest: false,
         logoutError: false,
+        isAuth: false,
         user: {}
       };
     }
@@ -129,7 +111,9 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         getUserRequest: false,
         getUserError: false,
-        user: action.payload
+        user: action.payload,
+        isAuth: true,
+        getUserLoaded: true
       };
     }
     case GET_USER_FAILED: {
@@ -137,7 +121,30 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         getUserRequest: false,
         getUserError: true,
-        errorText: 'Ошибка при получении данных пользователя'
+        errorText: 'Ошибка при получении данных пользователя',
+        getUserLoaded: false
+      };
+    }
+    case USER_UPDATE_REQUEST: {
+      return {
+        ...state,
+        userUpdateRequest: true
+      };
+    }
+    case USER_UPDATE_SUCCESS: {
+      return {
+        ...state,
+        userUpdateRequest: false,
+        userUpdateError: false,
+        user: action.payload
+      };
+    }
+    case USER_UPDATE_FAILED: {
+      return {
+        ...state,
+        userUpdateRequest: false,
+        userUpdateError: true,
+        errorText: 'Ошибка при обновлении данных пользователя'
       };
     }
     default: {

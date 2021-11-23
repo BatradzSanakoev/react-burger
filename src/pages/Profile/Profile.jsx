@@ -1,22 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import profile from './Profile.module.css';
-import { getUser } from '../../services/actions/user';
+import { getUser, updateUser } from '../../services/actions/user';
+import { PasswordInput } from '../../components/CustomInputs/PasswordInput';
+import { EmailInput } from '../../components/CustomInputs/EmailInput';
+import { NameInput } from '../../components/CustomInputs/NameInput';
 
 export const Profile = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.user);
+  const user = useSelector(state => state.user);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('Batradz777');
 
   const onChange = e => {
     const target = e.target;
-    target.name === 'email' ? setEmail(target.value) : setName(target.value);
+    target.name === 'email' ? setEmail(target.value) : target.name === 'name' ? setName(target.value) : setPassword(target.value);
   };
 
-  useEffect(() => dispatch(getUser()), []);
+  const cancelClick = e => {
+    e.preventDefault();
+    setEmail(user.user.email);
+    setName(user.user.name);
+    setPassword('Batradz777');
+  };
+
+  const saveUserInfo = e => {
+    e.preventDefault();
+    if (email !== user.user.email || name !== user.user.name) dispatch(updateUser({ email: email, name: name, password: password }));
+  };
+
+//   useEffect(() => dispatch(getUser()), []);
+  useEffect(() => {
+    setEmail(user.user.email);
+    setName(user.user.name);
+  }, [user.user.email, user.user.name]);
 
   return (
     <main className={profile.main}>
@@ -37,15 +56,35 @@ export const Profile = () => {
             В этом разделе вы можете изменить свои персональные данные
           </p>
         </div>
-        {user.email ? (
-          <div className={profile.profileColumn}>
-            <Input type='text' icon='EditIcon' placeholder='Имя' name='name' value={user.name || name} onChange={onChange} />
-            <Input type='email' icon='EditIcon' placeholder='Логин' name='email' value={user.email || email} onChange={onChange} />
-            <Input type='password' icon='EditIcon' placeholder='Пароль' value='Batradz777' />
+        <div className={profile.profileColumn}>
+          <NameInput placeholder='Имя' name='name' value={name} onChange={onChange} />
+          <EmailInput placeholder='Логин' name='email' value={email} onChange={onChange} />
+          <PasswordInput placeholder='Пароль' name='password' value={password} onChange={onChange} />
+          <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: 24 }}>
+            <button
+              type='submit'
+              className='text text_type_main-small'
+              style={{ border: 0, background: 'transparent', color: '#4C4CFF', cursor: 'pointer' }}
+              onClick={cancelClick}>
+              Отмена
+            </button>
+            <button
+              type='submit'
+              className='text text_type_main-small p-4 ml-4'
+              style={{
+                width: 167,
+                background: 'linear-gradient(63.18deg, #801ab3 0%, #4c4cff 100%)',
+                borderRadius: 64,
+                color: '#f2f2f3',
+                textAlign: 'center',
+                border: 0,
+                cursor: 'pointer'
+              }}
+              onClick={saveUserInfo}>
+              Сохранить
+            </button>
           </div>
-        ) : (
-          <></>
-        )}
+        </div>
       </div>
     </main>
   );
