@@ -25,8 +25,8 @@ export const getCookie = name => {
 };
 
 const setCookies = data => {
-  document.cookie = `accessToken=${data.accessToken.slice(7)}`;
-  document.cookie = `refreshToken=${data.refreshToken}`;
+  document.cookie = `accessToken=${data.accessToken.slice(7)}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+  document.cookie = `refreshToken=${data.refreshToken}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
 };
 
 const retriableFetch = async (url, options = {}) => {

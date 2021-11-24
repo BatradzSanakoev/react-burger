@@ -31,7 +31,6 @@ export const Profile = () => {
     if (email !== user.user.email || name !== user.user.name) dispatch(updateUser({ email: email, name: name, password: password }));
   };
 
-//   useEffect(() => dispatch(getUser()), []);
   useEffect(() => {
     setEmail(user.user.email);
     setName(user.user.name);
