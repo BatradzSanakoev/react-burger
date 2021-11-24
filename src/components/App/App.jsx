@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
@@ -20,33 +20,35 @@ import { ResetPassword } from '../../pages/ResetPassword/ResetPassword';
 import { Profile } from '../../pages/Profile/Profile';
 import { getUser, getCookie } from '../../services/actions/user';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
+import { GET_USER_FAILED } from '../../services/types';
 
 const App = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [modalDisplay, setModalDisplay] = React.useState(false);
-  const [modalType, setModalType] = React.useState();
+  const [modalDisplay, setModalDisplay] = useState(false);
+  const [modalType, setModalType] = useState();
 
-  const handleOpenModal = React.useCallback(() => {
+  const handleOpenModal = useCallback(() => {
     setModalDisplay(true);
   }, []);
 
-  const handleCloseModal = React.useCallback(() => {
+  const handleCloseModal = useCallback(() => {
     setModalDisplay(false);
     dispatch(clearOrder());
     dispatch(clearBurgerIngredientInfo());
   }, []);
 
-  const handleSetIngredientType = React.useCallback(() => {
+  const handleSetIngredientType = useCallback(() => {
     setModalType('ingredient');
   }, []);
 
-  const handleSetOrderType = React.useCallback(() => {
+  const handleSetOrderType = useCallback(() => {
     setModalType('order');
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (getCookie('accessToken')) dispatch(getUser());
+    else dispatch({ type: GET_USER_FAILED });
     dispatch(getBurgerIngredients());
   }, []);
 

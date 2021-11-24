@@ -94,8 +94,7 @@ export const login = ({ email, password, history }) => {
       .then(res => {
         if (res.success) {
           setCookies(res);
-          dispatch({ type: AUTH_SUCCESS });
-          // dispatch(getUser());
+          dispatch({ type: AUTH_SUCCESS, payload: res.user });
           history.push('/');
         } else Promise.reject(res);
       })

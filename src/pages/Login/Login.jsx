@@ -7,9 +7,9 @@ import { login } from '../../services/actions/user';
 
 export const Login = () => {
   const history = useHistory();
-  const location = useLocation();
+  const state = useLocation().state;
   const dispatch = useDispatch();
-  const { isAuth } = useSelector(state => state.user);
+  const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,8 +24,8 @@ export const Login = () => {
   };
 
   if (isAuth) {
-    return <Redirect to={lcoation.state?.from || '/'} />;
-  }
+    return <Redirect to={state?.from || '/profile'} />;
+  } else if (getUserRequest) return null;
 
   return (
     <main className={loginStyles.section}>

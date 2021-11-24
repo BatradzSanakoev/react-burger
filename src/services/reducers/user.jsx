@@ -66,7 +66,9 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         authRequest: false,
-        authError: false
+        authError: false,
+        user: action.payload,
+        isAuth: true
       };
     }
     case AUTH_FAILED: {
@@ -74,7 +76,8 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         authRequest: false,
         authError: true,
-        errorText: 'Ошибка при авторизации'
+        errorText: 'Ошибка при авторизации',
+        isAuth: false
       };
     }
     case LOGOUT_REQUEST: {
