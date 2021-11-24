@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useSelector } from 'react-redux';
 import forgotPassword from './ForgotPassword.module.css';
 import { MAIN_API, emailRegex } from '../../utils/constants';
 
 export const ForgotPassword = () => {
   const history = useHistory();
+  const location = useLocation();
+  const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const errorText = 'Некорректный email';
@@ -29,13 +32,18 @@ export const ForgotPassword = () => {
         else setEmailError(true);
       })
       .then(res => {
-        if (res.success) history.push('/reset-password');
+        if (res.success) history.replace('/reset-password', { forgotPageVisited: true });
         else setEmailError(true);
       })
       .catch(() => setEmailError(true));
   };
 
+  useEffect(() => history.replace({ forgotPageVisited: false }), []);
   useEffect(() => (email.length > 0 && !email.match(emailRegex) ? setEmailError(true) : setEmailError(false)), [email]);
+
+  if (isAuth) {
+    return <Redirect to={location.state?.from || '/profile'} />;
+  } else if (getUserRequest) return null;
 
   return (
     <main className={forgotPassword.section}>

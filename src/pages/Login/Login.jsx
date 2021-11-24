@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory, Redirect, useLocation } from 'react-router-dom';
 import { PasswordInput, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +7,7 @@ import { login } from '../../services/actions/user';
 
 export const Login = () => {
   const history = useHistory();
-  const state = useLocation().state;
+  const location = useLocation();
   const dispatch = useDispatch();
   const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ export const Login = () => {
   };
 
   if (isAuth) {
-    return <Redirect to={state?.from || '/profile'} />;
+    return <Redirect to={location.state?.from || '/profile'} />;
   } else if (getUserRequest) return null;
 
   return (

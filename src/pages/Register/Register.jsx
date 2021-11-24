@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector, useDispatch } from 'react-redux';
 import registerStyles from './Register.module.css';
@@ -8,8 +8,9 @@ import { register } from '../../services/actions/user';
 
 export const Register = () => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
+  const { user, isAuth, getUserRequest } = useSelector(state => state.user);
   const history = useHistory();
+  const location = useLocation();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,6 +28,10 @@ export const Register = () => {
   };
 
   useEffect(() => (email.length > 0 && !email.match(emailRegex) ? setEmailError(true) : setEmailError(false)), [email]);
+
+  if (isAuth) {
+    return <Redirect to={location.state?.from || '/profile'} />;
+  } else if (getUserRequest) return null;
 
   return (
     <main className={registerStyles.section}>

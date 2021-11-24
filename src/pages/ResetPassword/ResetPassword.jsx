@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useSelector } from 'react-redux';
 import resetPassword from './ResetPassword.module.css';
 import { MAIN_API } from '../../utils/constants';
 
 export const ResetPassword = () => {
   const history = useHistory();
+  const location = useLocation();
+  const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +21,7 @@ export const ResetPassword = () => {
 
   const onIconClick = () => {
     setShowPassword(!showPassword);
-    if (!showPassword) setTimeout(() => passwordRef.current.focus(), 0); //passwordRef.current.focus();
+    if (!showPassword) setTimeout(() => passwordRef.current.focus(), 0);
   };
 
   const handlePasswordOverlayClick = e => {
@@ -39,11 +42,16 @@ export const ResetPassword = () => {
         else alert('ERROR');
       })
       .then(res => {
-        if (res.success) history.push('/login');
+        if (res.success) history.replace('/login', { forgotPageVisited: false });
         else alert('ERROR');
       })
       .catch(err => alert(err));
   };
+
+  if (isAuth) {
+    return <Redirect to={location.state?.from || '/profile'} />;
+  } else if (!location.state || !location.state.forgotPageVisited) return <Redirect to={'/forgot-password'} />;
+  else if (getUserRequest) return null;
 
   return (
     <main className={resetPassword.section} onClick={handlePasswordOverlayClick}>
@@ -59,7 +67,7 @@ export const ResetPassword = () => {
               icon='ShowIcon'
               onChange={onChange}
               onIconClick={onIconClick}
-            //   ref={passwordRef}
+              //   ref={passwordRef}
             />
           </div>
           <div className={!showPassword ? resetPassword.hideInput : ''}>
