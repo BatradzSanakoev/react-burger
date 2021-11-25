@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import profile from './Profile.module.css';
-import { getUser, updateUser } from '../../services/actions/user';
+import { updateUser, logout } from '../../services/actions/user';
 import { PasswordInput } from '../../components/CustomInputs/PasswordInput';
 import { EmailInput } from '../../components/CustomInputs/EmailInput';
 import { NameInput } from '../../components/CustomInputs/NameInput';
 
 export const Profile = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const [email, setEmail] = useState('');
@@ -26,6 +27,11 @@ export const Profile = () => {
     setPassword('Batradz777');
   };
 
+  const exitClick = () => {
+    dispatch(logout());
+    history.replace('/login');
+  };
+
   const saveUserInfo = e => {
     e.preventDefault();
     if (email !== user.user.email || name !== user.user.name) dispatch(updateUser({ email: email, name: name, password: password }));
@@ -41,13 +47,20 @@ export const Profile = () => {
       <div className={profile.content}>
         <div className={`${profile.navColumn}`}>
           <nav className={profile.navBar}>
-            <NavLink to='/profile' className={`text text_type_main-large ${profile.navLink} pt-2 pb-2`} activeClassName={profile.activeNavLink}>
+            <NavLink exact to='/profile' className={`text text_type_main-large ${profile.navLink} pt-2 pb-2`} activeClassName={profile.activeNavLink}>
               Профиль
             </NavLink>
-            <NavLink to='/profile/orders' className={`text text_type_main-large text_color_inactive ${profile.navLink} pt-2 pb-2`}>
+            <NavLink
+              to='/profile/orders'
+              className={`text text_type_main-large ${profile.navLink} pt-2 pb-2`}
+              activeClassName={profile.activeNavLink}>
               История заказов
             </NavLink>
-            <NavLink to='/profile' className={`text text_type_main-large text_color_inactive ${profile.navLink} pt-2 pb-2`}>
+            <NavLink
+              to='/profile/exit'
+              className={`text text_type_main-large ${profile.navLink} pt-2 pb-2`}
+              activeClassName={profile.activeNavLink}
+              onClick={exitClick}>
               Выход
             </NavLink>
           </nav>

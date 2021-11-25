@@ -15,41 +15,7 @@ import {
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAILED
 } from '../types';
-import { MAIN_API } from '../../utils/constants';
-
-export const getCookie = name => {
-  const cookies = document.cookie.split('; ');
-  const token = cookies.find(cookie => (cookie.indexOf(name) !== -1 ? cookie : null));
-  if (token === undefined) return;
-  return name === 'accessToken' ? token.slice(12) : token.slice(13);
-};
-
-const setCookies = data => {
-  document.cookie = `accessToken=${data.accessToken.slice(7)}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
-  document.cookie = `refreshToken=${data.refreshToken}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
-};
-
-const retriableFetch = async (url, options = {}) => {
-  try {
-    return await fetch(url, options).then(res => {
-      if (res.ok) return res.json();
-      else return res.json().then(err => Promise.reject(err));
-    });
-  } catch (err) {
-    if (err.message === 'jwt expired') {
-      const refreshTokens = await refresh();
-      setCookies(refreshTokens);
-      if (!options.headers) {
-        options.headers = {};
-      }
-      options.headers.authorization = getCookie('refreshToken');
-      return await fetch(url, options).then(res => {
-        if (res.ok) return res.json();
-        else return res.json().then(err => Promise.reject(err));
-      });
-    } else throw err;
-  }
-};
+import { MAIN_API, setCookies, getCookie, retriableFetch } from '../../utils/constants';
 
 export const register = ({ email, password, name, history }) => {
   return dispatch => {

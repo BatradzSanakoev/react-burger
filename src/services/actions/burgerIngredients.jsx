@@ -9,7 +9,7 @@ export const getBurgerIngredients = () => {
     fetch(`${MAIN_API}/ingredients`)
       .then(res => {
         if (res.ok) return res.json();
-        else dispatch({ type: GET_BURGER_INGREDIENTS_FAILED });
+        else return res.json().then(err => Promise.reject(err));
       })
       .then(res => dispatch({ type: GET_BURGER_INGREDIENTS_SUCCESS, payload: res.data }))
       .catch(() => dispatch({ type: GET_BURGER_INGREDIENTS_FAILED }));

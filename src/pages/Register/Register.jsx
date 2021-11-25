@@ -29,9 +29,8 @@ export const Register = () => {
 
   useEffect(() => (email.length > 0 && !email.match(emailRegex) ? setEmailError(true) : setEmailError(false)), [email]);
 
-  if (isAuth) {
-    return <Redirect to={location.state?.from || '/profile'} />;
-  } else if (getUserRequest) return null;
+  if (getUserRequest) return null;
+  else if (!getUserRequest && isAuth) return <Redirect to={location.state?.from || '/profile'} />;
 
   return (
     <main className={registerStyles.section}>

@@ -32,7 +32,8 @@
 }
 
 .navLink {
-    text-decoration: none;
+    text-decoration: none;    
+    color: #8585ad;
 }
 
 .activeNavLink {

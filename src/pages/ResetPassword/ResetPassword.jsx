@@ -48,10 +48,10 @@ export const ResetPassword = () => {
       .catch(err => alert(err));
   };
 
-  if (isAuth) {
+  if (getUserRequest) return null;
+  else if (!getUserRequest && isAuth) {
     return <Redirect to={location.state?.from || '/profile'} />;
-  } else if (!location.state || !location.state.forgotPageVisited) return <Redirect to={'/forgot-password'} />;
-  else if (getUserRequest) return null;
+  } else if (!location.state?.forgotPageVisited) return <Redirect to={'/forgot-password'} />;
 
   return (
     <main className={resetPassword.section} onClick={handlePasswordOverlayClick}>

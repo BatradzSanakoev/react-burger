@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
-import { useHistory, useRouteMatch, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import modal from './Modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -8,27 +8,38 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 const modalRoot = document.getElementById('modals');
 
 const Modal = ({ children, onModalClose, type }) => {
-    const modalHeightValue = type === 'order' ? '90%' : '70%';
+  const history = useHistory();
+  const location = useLocation();
+  const modalHeightValue = type === 'order' ? '90%' : '70%';
 
-    const closeByEscape = e => {
-        e.code === 'Escape' && onModalClose();
-    };
+  const customModalClose = useCallback(() => {
+    onModalClose();
+    if (location.state?.fromSite) history.replace('/');
+  }, [location, history]);
 
-    React.useEffect(() => {
-        document.addEventListener('keydown', closeByEscape);
-        return () => document.removeEventListener('keydown', closeByEscape);
-    }, []);
+  const closeByEscape = e => {
+    if (e.code === 'Escape') {
+      if (type === 'order') onModalClose();
+      else customModalClose();
+    }
+  };
 
-    return ReactDOM.createPortal(
-        (
-            <ModalOverlay onModalClose={onModalClose}>
-                <div className={modal.modal} style={{ height: `${modalHeightValue}` }}>
-                    <div className={modal.closeIcon} onClick={onModalClose}><CloseIcon type='primary' /></div>
-                    {children}
-                </div>
-            </ModalOverlay>
-        ), modalRoot
-    );
+  useEffect(() => {
+    document.addEventListener('keydown', closeByEscape);
+    return () => document.removeEventListener('keydown', closeByEscape);
+  }, []);
+
+  return ReactDOM.createPortal(
+    <ModalOverlay onModalClose={type === 'order' ? onModalClose : customModalClose}>
+      <div className={modal.modal} style={{ height: `${modalHeightValue}` }}>
+        <div className={modal.closeIcon} onClick={type === 'order' ? onModalClose : customModalClose}>
+          <CloseIcon type='primary' />
+        </div>
+        {children}
+      </div>
+    </ModalOverlay>,
+    modalRoot
+  );
 };
 
 export default Modal;

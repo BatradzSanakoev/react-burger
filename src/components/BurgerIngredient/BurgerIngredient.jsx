@@ -1,15 +1,13 @@
 import React, { useMemo } from 'react';
 import { useDrag } from 'react-dnd';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredient from './BurgerIngredient.module.css';
-import { addBurgerIngredientInfo } from '../../services/actions/burgerIngredient';
 import Count from '../Count/Count';
 
 const BurgerIngredient = props => {
-  const dispatch = useDispatch();
   const history = useHistory();
   const { constructorBuns, constructorIngredients } = useSelector(state => state.burgerConstructor);
 
@@ -27,10 +25,10 @@ const BurgerIngredient = props => {
   }, [constructorIngredients]);
 
   const handleClick = () => {
-    dispatch(addBurgerIngredientInfo({ ...props }));
-    history.replace({ pathname: `/ingredients/${props._id}`, state: { from: '/' } });
-    props.onModalType();
-    props.onModalOpen();
+    history.replace({
+      pathname: `/ingredients/${props._id}`,
+      state: { fromSite: true }
+    });
   };
 
   const [{ opacity }, dragRef] = useDrag({

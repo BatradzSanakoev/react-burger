@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import burgerConstructor from './BurgerConstructor.module.css';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -15,7 +16,9 @@ import {
 
 const BurgerConstructor = props => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { constructorBuns, constructorIngredients } = useSelector(state => state.burgerConstructor);
+  const { isAuth } = useSelector(state => state.user);
   const summaryPrice = useMemo(() => {
     let sum = 0;
     constructorIngredients.forEach(item => {
@@ -25,9 +28,9 @@ const BurgerConstructor = props => {
   }, [constructorBuns, constructorIngredients]);
 
   const handleClick = () => {
+    if (!isAuth) return history.replace('/login');
     const itemsId = constructorIngredients.map(item => item._id);
     dispatch(getOrder([...itemsId, constructorBuns._id]));
-    props.onModalType();
     props.onModalOpen();
   };
 
@@ -110,8 +113,7 @@ const BurgerConstructor = props => {
 };
 
 BurgerConstructor.propTypes = {
-  onModalOpen: PropTypes.func.isRequired,
-  onModalType: PropTypes.func.isRequired
+  onModalOpen: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;
