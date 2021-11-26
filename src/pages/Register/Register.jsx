@@ -40,7 +40,7 @@ export const Register = () => {
           <Input type='text' placeholder='Имя' name='username' value={username || ''} onChange={onChange} />
           <Input type='email' placeholder='E-mail' name='email' value={email || ''} onChange={onChange} error={emailError} errorText={errorText} />
           <PasswordInput name='password' value={password || ''} onChange={onChange} />
-          <Button htmlType='submit' type='primary' size='medium' disabled={!email || emailError || !password || !username || user.registerError}>
+          <Button type='primary' size='medium' disabled={!email || emailError || !password || !username || user.registerError}>
             Вход
           </Button>
           <p className='text text_type_main-small mt-2' style={{ color: 'red' }}>

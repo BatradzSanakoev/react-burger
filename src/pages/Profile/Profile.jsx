@@ -75,10 +75,10 @@ export const Profile = () => {
             <EmailInput placeholder='Логин' name='email' value={email} onChange={onChange} />
             <PasswordInput placeholder='Пароль' name='password' value={password} onChange={onChange} />
             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <Button htmlType='submit' size='medium' type='secondary' onClick={cancelClick}>
+              <Button size='medium' type='secondary' onClick={cancelClick}>
                 Отмена
               </Button>
-              <Button htmlType='submit' size='medium' type='primary' onClick={saveUserInfo}>
+              <Button size='medium' type='primary' onClick={saveUserInfo}>
                 Сохранить
               </Button>
             </div>

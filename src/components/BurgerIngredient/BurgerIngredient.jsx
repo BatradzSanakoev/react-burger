@@ -25,8 +25,6 @@ const BurgerIngredient = props => {
   }, [constructorIngredients]);
 
   const handleClick = () => {
-    props.onModalType();
-    props.onModalOpen();
     history.replace({
       pathname: `/ingredients/${props._id}`,
       state: { fromSite: true }

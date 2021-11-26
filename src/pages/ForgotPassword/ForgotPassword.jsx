@@ -58,7 +58,7 @@ export const ForgotPassword = () => {
             error={emailError}
             errorText={errorText}
           />
-          <Button htmlType='submit' type='primary' size='medium' disabled={!email || emailError}>
+          <Button type='primary' size='medium' disabled={!email || emailError}>
             Восстановить
           </Button>
         </form>

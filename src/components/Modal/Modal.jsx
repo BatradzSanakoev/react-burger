@@ -6,7 +6,7 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const modalRoot = document.getElementById('modals');
 
-const Modal = ({ children, onModalClose, type, modalDisplay }) => {
+const Modal = ({ children, onModalClose, type }) => {
   const modalHeightValue = type === 'order' ? '90%' : '70%';
 
   const closeByEscape = e => {
@@ -18,7 +18,6 @@ const Modal = ({ children, onModalClose, type, modalDisplay }) => {
     return () => document.removeEventListener('keydown', closeByEscape);
   }, []);
 
-  if (!modalDisplay) return null;
   return ReactDOM.createPortal(
     <ModalOverlay onModalClose={onModalClose}>
       <div className={modal.modal} style={{ height: `${modalHeightValue}` }}>

@@ -102,7 +102,7 @@ const BurgerConstructor = props => {
           </p>
           <CurrencyIcon type='primary' />
         </div>
-        <Button type='primary' htmlType='button' size='medium' onClick={handleClick} disabled={!constructorBuns}>
+        <Button type='primary' size='medium' onClick={handleClick} disabled={!constructorBuns}>
           Оформить заказ
         </Button>
       </div>

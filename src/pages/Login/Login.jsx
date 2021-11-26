@@ -33,7 +33,7 @@ export const Login = () => {
           <h2 className='text text_type_main-large'>Вход</h2>
           <EmailInput name='email' value={email || ''} onChange={onChange} />
           <PasswordInput name='password' value={password || ''} onChange={onChange} />
-          <Button htmlType='submit' type='primary' size='medium' disabled={!email || !password}>
+          <Button type='primary' size='medium' disabled={!email || !password}>
             Вход
           </Button>
         </form>

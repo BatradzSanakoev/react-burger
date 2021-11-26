@@ -83,7 +83,7 @@ export const ResetPassword = () => {
             />
           </div>
           <Input type='text' placeholder='Введите код из письма' name='code' value={code || ''} onChange={onChange} />
-          <Button htmlType='submit' type='primary' size='medium' disabled={!password || !code}>
+          <Button type='primary' size='medium' disabled={!password || !code}>
             Восстановить
           </Button>
         </form>

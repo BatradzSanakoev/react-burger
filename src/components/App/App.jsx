@@ -36,10 +36,6 @@ const App = () => {
     setModalDisplay(false);
     if (modalType === 'order') dispatch(clearOrder());
     else history.replace('/');
-  }, [modalType]);
-
-  const handleSetIngredientType = React.useCallback(() => {
-    setModalType('ingredient');
   }, []);
 
   const handleSetOrderType = React.useCallback(() => {
@@ -54,16 +50,18 @@ const App = () => {
 
   return (
     <>
-      <Modal onModalClose={handleCloseModal} type={modalType} modalDisplay={modalDisplay}>
-        <OrderDetails />
-      </Modal>
+      {modalDisplay && (
+        <Modal onModalClose={handleCloseModal} type={modalType} modalDisplay={modalDisplay}>
+          <OrderDetails />
+        </Modal>
+      )}
       <AppHeader />
       <Switch>
         <Route path='/' exact>
           <main className={appStyles.main}>
             <div className={appStyles.content}>
               <DndProvider backend={HTML5Backend}>
-                <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} />
+                <BurgerIngredients />
                 <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} />
               </DndProvider>
             </div>
@@ -90,7 +88,7 @@ const App = () => {
         path='/ingredients/:id'
         render={({ location: { state } }) =>
           state?.fromSite && (
-            <Modal onModalClose={handleCloseModal} type={modalType} modalDisplay={modalDisplay}>
+            <Modal onModalClose={handleCloseModal} type={'ingredient'}>
               <IngredientDetails />
             </Modal>
           )
