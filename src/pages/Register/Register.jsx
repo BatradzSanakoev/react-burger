@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
-import { PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector, useDispatch } from 'react-redux';
 import registerStyles from './Register.module.css';
 import { emailRegex } from '../../utils/constants';
@@ -40,12 +40,9 @@ export const Register = () => {
           <Input type='text' placeholder='Имя' name='username' value={username || ''} onChange={onChange} />
           <Input type='email' placeholder='E-mail' name='email' value={email || ''} onChange={onChange} error={emailError} errorText={errorText} />
           <PasswordInput name='password' value={password || ''} onChange={onChange} />
-          <button
-            type='submit'
-            className={`${registerStyles.button} mt-4 p-4 text text_type_main-medium`}
-            disabled={!email || emailError || !password || !username || user.registerError}>
-            Зарегистрироваться
-          </button>
+          <Button htmlType='submit' type='primary' size='medium' disabled={!email || emailError || !password || !username || user.registerError}>
+            Вход
+          </Button>
           <p className='text text_type_main-small mt-2' style={{ color: 'red' }}>
             {user.errorText}
           </p>

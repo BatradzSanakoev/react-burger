@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
@@ -24,8 +24,9 @@ import { GET_USER_FAILED } from '../../services/types';
 
 const App = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [modalDisplay, setModalDisplay] = useState(false);
-  const [modalType, setModalType] = useState(null);
+  const [modalType, setModalType] = React.useState(null);
 
   const handleOpenModal = useCallback(() => {
     setModalDisplay(true);
@@ -33,14 +34,15 @@ const App = () => {
 
   const handleCloseModal = useCallback(() => {
     setModalDisplay(false);
-    dispatch(clearOrder());
-  }, []);
+    if (modalType === 'order') dispatch(clearOrder());
+    else history.replace('/');
+  }, [modalType]);
 
-  const handleSetIngredientType = useCallback(() => {
+  const handleSetIngredientType = React.useCallback(() => {
     setModalType('ingredient');
   }, []);
 
-  const handleSetOrderType = useCallback(() => {
+  const handleSetOrderType = React.useCallback(() => {
     setModalType('order');
   }, []);
 
@@ -51,20 +53,18 @@ const App = () => {
   }, []);
 
   return (
-    <BrowserRouter>
-      {modalDisplay && (
-        <Modal onModalClose={handleCloseModal} type={'order'}>
-          <OrderDetails />
-        </Modal>
-      )}
+    <>
+      <Modal onModalClose={handleCloseModal} type={modalType} modalDisplay={modalDisplay}>
+        <OrderDetails />
+      </Modal>
       <AppHeader />
       <Switch>
         <Route path='/' exact>
           <main className={appStyles.main}>
             <div className={appStyles.content}>
               <DndProvider backend={HTML5Backend}>
-                <BurgerIngredients />
-                <BurgerConstructor onModalOpen={handleOpenModal} />
+                <BurgerIngredients onModalOpen={handleOpenModal} onModalType={handleSetIngredientType} />
+                <BurgerConstructor onModalOpen={handleOpenModal} onModalType={handleSetOrderType} />
               </DndProvider>
             </div>
           </main>
@@ -90,13 +90,13 @@ const App = () => {
         path='/ingredients/:id'
         render={({ location: { state } }) =>
           state?.fromSite && (
-            <Modal onModalClose={handleCloseModal} type={'ingredient'}>
+            <Modal onModalClose={handleCloseModal} type={modalType} modalDisplay={modalDisplay}>
               <IngredientDetails />
             </Modal>
           )
         }
       />
-    </BrowserRouter>
+    </>
   );
 };
 

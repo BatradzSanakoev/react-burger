@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory, Redirect, useLocation } from 'react-router-dom';
-import { PasswordInput, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { PasswordInput, EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import loginStyles from './Login.module.css';
 import { login } from '../../services/actions/user';
@@ -33,9 +33,9 @@ export const Login = () => {
           <h2 className='text text_type_main-large'>Вход</h2>
           <EmailInput name='email' value={email || ''} onChange={onChange} />
           <PasswordInput name='password' value={password || ''} onChange={onChange} />
-          <button type='submit' className={`${loginStyles.button} mt-4 p-4 text text_type_main-medium`}>
+          <Button htmlType='submit' type='primary' size='medium' disabled={!email || !password}>
             Вход
-          </button>
+          </Button>
         </form>
         <div>
           <div className='text text_type_main-default text_color_inactive'>

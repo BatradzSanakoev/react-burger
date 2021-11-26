@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import burgerIngredients from './BurgerIngredients.module.css';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 
-const BurgerIngredients = () => {
+const BurgerIngredients = ({ onModalOpen, onModalType }) => {
   const data = useSelector(state => state.burgerIngredients.ingredients);
   const tabsRef = useRef();
   const bunsRef = useRef();
@@ -71,6 +71,8 @@ const BurgerIngredients = () => {
                 fat={item.fat}
                 carbohydrates={item.carbohydrates}
                 calories={item.calories}
+                onModalOpen={onModalOpen}
+                onModalType={onModalType}
               />
             ))}
           </div>
@@ -90,6 +92,8 @@ const BurgerIngredients = () => {
                 fat={item.fat}
                 carbohydrates={item.carbohydrates}
                 calories={item.calories}
+                onModalOpen={onModalOpen}
+                onModalType={onModalType}
               />
             ))}
           </div>
@@ -109,6 +113,8 @@ const BurgerIngredients = () => {
                 fat={item.fat}
                 carbohydrates={item.carbohydrates}
                 calories={item.calories}
+                onModalOpen={onModalOpen}
+                onModalType={onModalType}
               />
             ))}
           </div>
@@ -118,6 +124,11 @@ const BurgerIngredients = () => {
       )}
     </div>
   );
+};
+
+BurgerIngredients.propTypes = {
+  onModalOpen: PropTypes.func.isRequired,
+  onModalType: PropTypes.func.isRequired
 };
 
 export default BurgerIngredients;

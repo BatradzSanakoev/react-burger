@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
-import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 import resetPassword from './ResetPassword.module.css';
 import { MAIN_API } from '../../utils/constants';
@@ -83,9 +83,9 @@ export const ResetPassword = () => {
             />
           </div>
           <Input type='text' placeholder='Введите код из письма' name='code' value={code || ''} onChange={onChange} />
-          <button type='submit' className={`${resetPassword.button} mt-4 p-4 text text_type_main-medium`} disabled={!password || !code}>
+          <Button htmlType='submit' type='primary' size='medium' disabled={!password || !code}>
             Восстановить
-          </button>
+          </Button>
         </form>
         <div>
           <div className='text text_type_main-default text_color_inactive'>

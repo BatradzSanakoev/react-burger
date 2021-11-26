@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, Redirect, useLocation } from 'react-router-dom';
 import ingredientDetails from './IngredientDetails.module.css';
 
 const IngredientDetails = () => {
+  const location = useLocation();
   const { id } = useParams();
   const data = useSelector(state => state.burgerIngredients.ingredients);
   const { ingredientsLoaded } = useSelector(state => state.burgerIngredients);
@@ -14,7 +15,7 @@ const IngredientDetails = () => {
   if (!ingredientsLoaded) return null;
   else if (ingredientsLoaded && !currentIngredient) return <Redirect to='/' />;
   return (
-    <div className={ingredientDetails.container}>
+    <div className={ingredientDetails.container} style={{ height: `${!location.state?.fromSite && '90vh'}`}}>
       <h3 className={`text text_type_main-large mt-15`}>Детали ингредиента</h3>
       <img src={currentIngredient.image_large} alt='ingredient-icon' className={ingredientDetails.image} />
       <p className={`text text_type_main-medium mt-4`}>{currentIngredient.name}</p>

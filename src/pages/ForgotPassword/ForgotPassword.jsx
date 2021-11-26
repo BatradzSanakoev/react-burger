@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
-import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 import forgotPassword from './ForgotPassword.module.css';
 import { MAIN_API, emailRegex } from '../../utils/constants';
@@ -58,9 +58,9 @@ export const ForgotPassword = () => {
             error={emailError}
             errorText={errorText}
           />
-          <button type='submit' className={`${forgotPassword.button} mt-4 p-4 text text_type_main-medium`} disabled={!email || emailError}>
+          <Button htmlType='submit' type='primary' size='medium' disabled={!email || emailError}>
             Восстановить
-          </button>
+          </Button>
         </form>
         <div>
           <div className='text text_type_main-default text_color_inactive'>

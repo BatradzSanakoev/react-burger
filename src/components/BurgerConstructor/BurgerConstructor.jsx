@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import burgerConstructor from './BurgerConstructor.module.css';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { getOrder } from '../../services/actions/order';
 import {
   addConstructorIngredient,
@@ -31,6 +31,7 @@ const BurgerConstructor = props => {
     if (!isAuth) return history.replace('/login');
     const itemsId = constructorIngredients.map(item => item._id);
     dispatch(getOrder([...itemsId, constructorBuns._id]));
+    props.onModalType();
     props.onModalOpen();
   };
 
@@ -101,19 +102,17 @@ const BurgerConstructor = props => {
           </p>
           <CurrencyIcon type='primary' />
         </div>
-        <button
-          className={`${burgerConstructor.button} pt-5 pr-10 pb-5 pl-10 text text_type_main-medium`}
-          onClick={handleClick}
-          disabled={!constructorBuns}>
+        <Button type='primary' htmlType='button' size='medium' onClick={handleClick} disabled={!constructorBuns}>
           Оформить заказ
-        </button>
+        </Button>
       </div>
     </div>
   );
 };
 
 BurgerConstructor.propTypes = {
-  onModalOpen: PropTypes.func.isRequired
+  onModalOpen: PropTypes.func.isRequired,
+  onModalType: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor;
