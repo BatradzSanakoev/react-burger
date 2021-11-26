@@ -45,7 +45,8 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         registerRequest: false,
-        registerError: false
+        registerError: false,
+        errorText: ''
       };
     }
     case REGISTER_FAILED: {
@@ -68,7 +69,8 @@ export const userReducer = (state = initialState, action) => {
         authRequest: false,
         authError: false,
         user: action.payload,
-        isAuth: true
+        isAuth: true,
+        errorText: ''
       };
     }
     case AUTH_FAILED: {
@@ -92,7 +94,8 @@ export const userReducer = (state = initialState, action) => {
         logoutRequest: false,
         logoutError: false,
         isAuth: false,
-        user: {}
+        user: {},
+        errorText: ''
       };
     }
     case LOGOUT_FAILED: {
@@ -116,7 +119,8 @@ export const userReducer = (state = initialState, action) => {
         getUserError: false,
         user: action.payload,
         isAuth: true,
-        getUserLoaded: true
+        getUserLoaded: true,
+        errorText: ''
       };
     }
     case GET_USER_FAILED: {
@@ -139,7 +143,8 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         userUpdateRequest: false,
         userUpdateError: false,
-        user: action.payload
+        user: action.payload,
+        errorText: ''
       };
     }
     case USER_UPDATE_FAILED: {
