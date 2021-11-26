@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import profile from './Profile.module.css';
 import { updateUser, logout } from '../../services/actions/user';
 import { PasswordInput } from '../../components/CustomInputs/PasswordInput';
@@ -69,32 +70,18 @@ export const Profile = () => {
           </p>
         </div>
         <div className={profile.profileColumn}>
-          <NameInput placeholder='Имя' name='name' value={name} onChange={onChange} />
-          <EmailInput placeholder='Логин' name='email' value={email} onChange={onChange} />
-          <PasswordInput placeholder='Пароль' name='password' value={password} onChange={onChange} />
-          <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: 24 }}>
-            <button
-              type='submit'
-              className='text text_type_main-small'
-              style={{ border: 0, background: 'transparent', color: '#4C4CFF', cursor: 'pointer' }}
-              onClick={cancelClick}>
-              Отмена
-            </button>
-            <button
-              type='submit'
-              className='text text_type_main-small p-4 ml-4'
-              style={{
-                width: 167,
-                background: 'linear-gradient(63.18deg, #801ab3 0%, #4c4cff 100%)',
-                borderRadius: 64,
-                color: '#f2f2f3',
-                textAlign: 'center',
-                border: 0,
-                cursor: 'pointer'
-              }}
-              onClick={saveUserInfo}>
-              Сохранить
-            </button>
+          <div className={profile.profileInfo}>
+            <NameInput placeholder='Имя' name='name' value={name} onChange={onChange} />
+            <EmailInput placeholder='Логин' name='email' value={email} onChange={onChange} />
+            <PasswordInput placeholder='Пароль' name='password' value={password} onChange={onChange} />
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+              <Button htmlType='submit' size='medium' type='secondary' onClick={cancelClick}>
+                Отмена
+              </Button>
+              <Button htmlType='submit' size='medium' type='primary' onClick={saveUserInfo}>
+                Сохранить
+              </Button>
+            </div>
           </div>
         </div>
       </div>
