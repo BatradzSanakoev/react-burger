@@ -34,9 +34,11 @@ const App = () => {
 
   const handleCloseModal = useCallback(() => {
     setModalDisplay(false);
-    if (modalType === 'order') dispatch(clearOrder());
-    else history.replace('/');
-  }, []);
+    if (modalType === 'order') {
+      dispatch(clearOrder());
+      setModalType(null);
+    } else history.replace('/');
+  }, [modalType]);
 
   const handleSetOrderType = React.useCallback(() => {
     setModalType('order');
