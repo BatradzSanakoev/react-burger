@@ -3,7 +3,8 @@ import { GET_BURGER_INGREDIENTS_REQUEST, GET_BURGER_INGREDIENTS_SUCCESS, GET_BUR
 const initialState = {
   ingredients: [],
   ingredientsRequest: false,
-  ingredientsFailed: false
+  ingredientsFailed: false,
+  ingredientsLoaded: false,
 };
 
 export const burgerIngredientsReducer = (state = initialState, action) => {
@@ -19,7 +20,8 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
         ...state,
         ingredients: action.payload,
         ingredientsRequest: false,
-        ingredientsFailed: false
+        ingredientsFailed: false,
+        ingredientsLoaded: true
       };
     }
     case GET_BURGER_INGREDIENTS_FAILED: {

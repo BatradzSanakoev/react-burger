@@ -16,9 +16,15 @@
 }
 
 .navButton {
+    color: #8585ad;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-decoration: none;
+}
+
+.activeNavButton {
+    color: #f2f2f3;
 }
 
 .navText {
