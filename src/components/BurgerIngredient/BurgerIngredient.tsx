@@ -2,14 +2,30 @@ import React, { useMemo } from 'react';
 import { useDrag } from 'react-dnd';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredient from './BurgerIngredient.module.css';
 import Count from '../Count/Count';
+import { RootState } from '../../services/reducers';
 
-const BurgerIngredient = props => {
+type TBurgerIngredientProps = {
+  _id: string;
+  name: string;
+  type: string;
+  image: string;
+  price: number;
+};
+
+type TBurgerConstructorType = {
+  constructorBuns: (TBurgerIngredientProps & { proteins: number; fat: number; carbohydrates: number; calories: number }) | null;
+  constructorIngredients: Array<(TBurgerIngredientProps & { proteins: number; fat: number; carbohydrates: number; calories: number }) | []>;
+  constructorCount: number;
+};
+
+const BurgerIngredient = (props: TBurgerIngredientProps) => {
   const history = useHistory();
-  const { constructorBuns, constructorIngredients } = useSelector(state => state.burgerConstructor);
+  const { constructorBuns, constructorIngredients } = useSelector(
+    (state: Omit<RootState, 'burgerConstructor'> & { burgerConstructor: TBurgerConstructorType }) => state.burgerConstructor
+  );
 
   const bunsCount = useMemo(() => {
     if (!constructorBuns) return;
@@ -18,7 +34,7 @@ const BurgerIngredient = props => {
 
   const ingredientCount = useMemo(() => {
     let count = 0;
-    constructorIngredients.forEach(item => {
+    constructorIngredients.forEach((item: any) => {
       if (item._id === props._id) count = count + 1;
     });
     return count;
@@ -52,13 +68,6 @@ const BurgerIngredient = props => {
       </p>
     </div>
   );
-};
-
-BurgerIngredient.propTypes = {
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  type: PropTypes.string
 };
 
 export default BurgerIngredient;

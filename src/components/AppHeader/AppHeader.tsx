@@ -4,7 +4,7 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 import appHeader from './AppHeader.module.css';
 
 const AppHeader = () => {
-  const { pathname } = useLocation();
+  const { pathname } = useLocation<any>();
   return (
     <header className={`${appHeader.header} pt-4 pb-4`}>
       <div className={appHeader.headerContent}>

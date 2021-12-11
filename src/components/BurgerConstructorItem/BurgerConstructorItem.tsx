@@ -1,14 +1,22 @@
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDrag, useDrop } from 'react-dnd';
-import PropTypes from 'prop-types';
 import { CurrencyIcon, DragIcon, LockIcon, DeleteIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorItem from './BurgerConstructorItem.module.css';
 import { decreaseConstructorCount, deleteConstructorIngredient, updateConstructorIngredients } from '../../services/actions/burgerConstructor';
 
-const BurgerConstructorItem = props => {
+type TBurgerConstructorItemProps = {
+  uniqueKey?: number;
+  index?: number;
+  type?: string;
+  image: string;
+  name: string;
+  price: number;
+};
+
+const BurgerConstructorItem = (props: TBurgerConstructorItemProps) => {
   const dispatch = useDispatch();
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const burgerTopBottomNote = () => {
     if (!props.type) return '';
     if (props.type === 'bun-top') return '(верх)';
@@ -27,7 +35,7 @@ const BurgerConstructorItem = props => {
 
   const [, dropRef] = useDrop({
     accept: 'constructor',
-    hover: (item, monitor) => {
+    hover: (item: TBurgerConstructorItemProps, monitor) => {
       if (!ref.current) return;
       const dragIndex = item.index;
       const hoverIndex = props.index;
@@ -35,9 +43,9 @@ const BurgerConstructorItem = props => {
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+      const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
+      if (dragIndex! < hoverIndex! && hoverClientY < hoverMiddleY) return;
+      if (dragIndex! > hoverIndex! && hoverClientY > hoverMiddleY) return;
       dispatch(updateConstructorIngredients(dragIndex, hoverIndex));
       item.index = hoverIndex;
     }
@@ -56,9 +64,8 @@ const BurgerConstructorItem = props => {
   return (
     <div
       className={`${burgerConstructorItem.item}`}
-      style={{ justifyContent: `${props.type && 'flex-end'}` }}
-      ref={!props.type ? ref : null}
-      style={{ opacity: `${opacity}` }}>
+      style={{ justifyContent: `${props.type && 'flex-end'}`, opacity: `${opacity}` }}
+      ref={!props.type ? ref : null}>
       {!props.type && <DragIcon type='primary' />}
       <div className={`${burgerTopBottomClass()} pl-6 pt-4 pb-4 pr-8`}>
         <img alt='item-card' src={props.image} className={burgerConstructorItem.image} />
@@ -71,13 +78,6 @@ const BurgerConstructorItem = props => {
       </div>
     </div>
   );
-};
-
-BurgerConstructorItem.propTypes = {
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  type: PropTypes.string
 };
 
 export default BurgerConstructorItem;

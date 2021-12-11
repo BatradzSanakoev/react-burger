@@ -1,42 +1,36 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, ChangeEvent } from 'react';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
-const validateEmail = email => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+type TNameInputProps = {
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  name: string;
+  placeholder: string;
+  size?: 'small' | 'default' | undefined;
 };
 
-export const EmailInput = ({ value, onChange, name, size = 'default' }) => {
+export const NameInput = ({ value, onChange, name, placeholder, size = 'default' }: TNameInputProps) => {
   const [fieldDisabled, setDisabled] = useState(true);
   const [error, setError] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onIconClick = () => {
     setDisabled(false);
     setTimeout(() => inputRef.current?.focus(), 0);
   };
 
-  const validateField = value => {
-    setError(!validateEmail(value));
-  };
-
   const onFocus = () => {
     setError(false);
   };
 
-  const onBlur = e => {
-    if (e.target.value) {
-      validateField(e.target.value);
-    } else {
-      setError(false);
-    }
+  const onBlur = () => {
     setDisabled(true);
   };
-  
+
   return (
     <Input
-      type='email'
-      placeholder='Email'
+      type='text'
+      placeholder={placeholder}
       onChange={onChange}
       icon={!fieldDisabled ? 'CloseIcon' : 'EditIcon'}
       value={value}

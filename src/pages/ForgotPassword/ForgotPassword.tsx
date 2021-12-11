@@ -1,24 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 import forgotPassword from './ForgotPassword.module.css';
 import { MAIN_API, emailRegex } from '../../utils/constants';
+import { RootState } from '../../services/reducers';
+
+type TAuthType = {
+  registerRequest: boolean;
+  registerError: boolean;
+  authRequest: boolean;
+  authError: boolean;
+  logoutRequest: boolean;
+  logoutError: boolean;
+  errorText: string | null;
+  getUserRequest: boolean;
+  getUserError: boolean;
+  getUserLoaded: boolean;
+  userUpdateRequest: boolean;
+  userUpdateError: boolean;
+  isAuth: boolean;
+  user: any;
+};
 
 export const ForgotPassword = () => {
   const history = useHistory();
   const location = useLocation();
-  const { isAuth, getUserRequest } = useSelector(state => state.user);
+  const { isAuth, getUserRequest } = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const errorText = 'Некорректный email';
 
-  const onChange = e => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     target.name === 'email' && setEmail(target.value);
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch(`${MAIN_API}/password-reset`, {
       method: 'POST',
@@ -38,11 +56,11 @@ export const ForgotPassword = () => {
       .catch(() => setEmailError(true));
   };
 
-  useEffect(() => history.replace({ forgotPageVisited: false }), []);
+  useEffect(() => (history as any).replace({ forgotPageVisited: false }), []);
   useEffect(() => (email.length > 0 && !email.match(emailRegex) ? setEmailError(true) : setEmailError(false)), [email]);
 
   if (getUserRequest) return null;
-  else if (!getUserRequest && isAuth) return <Redirect to={location.state?.from || '/profile'} />;
+  else if (!getUserRequest && isAuth) return <Redirect to={(location as any).state?.from || '/profile'} />;
 
   return (
     <main className={forgotPassword.section}>
@@ -58,6 +76,7 @@ export const ForgotPassword = () => {
             error={emailError}
             errorText={errorText}
           />
+          {/* @ts-ignore */}
           <Button type='primary' size='medium' disabled={!email || emailError}>
             Восстановить
           </Button>
