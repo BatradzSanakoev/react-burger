@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useDrag } from 'react-dnd';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredient from './BurgerIngredient.module.css';
 import Count from '../Count/Count';
@@ -22,6 +22,7 @@ type TBurgerConstructorType = {
 };
 
 const BurgerIngredient = (props: TBurgerIngredientProps) => {
+  const location = useLocation<any>();
   const history = useHistory();
   const { constructorBuns, constructorIngredients } = useSelector(
     (state: Omit<RootState, 'burgerConstructor'> & { burgerConstructor: TBurgerConstructorType }) => state.burgerConstructor
@@ -43,7 +44,7 @@ const BurgerIngredient = (props: TBurgerIngredientProps) => {
   const handleClick = () => {
     history.replace({
       pathname: `/ingredients/${props._id}`,
-      state: { fromSite: true }
+      state: { background: location }
     });
   };
 

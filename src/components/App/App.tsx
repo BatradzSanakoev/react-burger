@@ -25,6 +25,8 @@ import { GET_USER_FAILED } from '../../services/types';
 const App = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation<any>();
+  const background = location.state?.background;
   const [modalDisplay, setModalDisplay] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string | null>(null);
 
@@ -58,7 +60,7 @@ const App = () => {
         </Modal>
       )}
       <AppHeader />
-      <Switch>
+      <Switch location={background ?? location}>
         <Route path='/' exact>
           <main className={appStyles.main}>
             <div className={appStyles.content}>
@@ -84,18 +86,17 @@ const App = () => {
         <ProtectedRoute path='/profile'>
           <Profile />
         </ProtectedRoute>
-        <Route path='/ingredients/:id' render={({ location: { state } }) => !(state as { fromSite?: boolean })?.fromSite && <IngredientDetails />} />
+        <Route path='/ingredients/:id'>
+          <IngredientDetails />
+        </Route>
       </Switch>
-      <Route
-        path='/ingredients/:id'
-        render={({ location: { state } }) =>
-          (state as { fromSite?: boolean })?.fromSite && (
-            <Modal onModalClose={handleCloseModal} type={'ingredient'}>
-              <IngredientDetails />
-            </Modal>
-          )
-        }
-      />
+      {background && (
+        <Route path='/ingredients/:id'>
+          <Modal onModalClose={handleCloseModal} type={'ingredient'}>
+            <IngredientDetails />
+          </Modal>
+        </Route>
+      )}
     </>
   );
 };
