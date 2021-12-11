@@ -2,27 +2,11 @@ import React, { useEffect, useState, ReactNode } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../services/reducers';
+import { TAuthType } from '../../utils/types';
 
 type TProtectedRouteProps = {
   children: ReactNode;
   path: string;
-};
-
-type TAuthType = {
-  registerRequest: boolean;
-  registerError: boolean;
-  authRequest: boolean;
-  authError: boolean;
-  logoutRequest: boolean;
-  logoutError: boolean;
-  errorText: string | null;
-  getUserRequest: boolean;
-  getUserError: boolean;
-  getUserLoaded: boolean;
-  userUpdateRequest: boolean;
-  userUpdateError: boolean;
-  isAuth: boolean;
-  user: any;
 };
 
 export const ProtectedRoute = ({ children, ...rest }: TProtectedRouteProps) => {

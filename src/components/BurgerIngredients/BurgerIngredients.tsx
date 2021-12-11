@@ -4,25 +4,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredients from './BurgerIngredients.module.css';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 import { RootState } from '../../services/reducers';
-
-type TIngredientsType = {
-  _id: string;
-  name: string;
-  type: string;
-  image?: string;
-  image_large: string;
-  price: number;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-};
-type TBurgerIngredientsType = {
-  ingredients: Array<TIngredientsType> | [];
-  ingredientsRequest: boolean;
-  ingredientsFailed: boolean;
-  ingredientsLoaded: boolean;
-};
+import { TBurgerIngredientsType } from '../../utils/types';
 
 const BurgerIngredients = () => {
   const data = useSelector(

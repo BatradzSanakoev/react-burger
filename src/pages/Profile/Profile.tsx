@@ -8,23 +8,7 @@ import { PasswordInput } from '../../components/CustomInputs/PasswordInput';
 import { EmailInput } from '../../components/CustomInputs/EmailInput';
 import { NameInput } from '../../components/CustomInputs/NameInput';
 import { RootState } from '../../services/reducers';
-
-type TAuthType = {
-  registerRequest: boolean;
-  registerError: boolean;
-  authRequest: boolean;
-  authError: boolean;
-  logoutRequest: boolean;
-  logoutError: boolean;
-  errorText: string | null;
-  getUserRequest: boolean;
-  getUserError: boolean;
-  getUserLoaded: boolean;
-  userUpdateRequest: boolean;
-  userUpdateError: boolean;
-  isAuth: boolean;
-  user: any;
-};
+import { TAuthType } from '../../utils/types';
 
 export const Profile = () => {
   const history = useHistory();

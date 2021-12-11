@@ -3,25 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams, Redirect, useLocation } from 'react-router-dom';
 import ingredientDetails from './IngredientDetails.module.css';
 import { RootState } from '../../services/reducers';
-
-type TIngredientsType = {
-  _id: string;
-  name: string;
-  type: string;
-  image?: string;
-  image_large: string;
-  price: number;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-};
-type TBurgerIngredientsType = {
-  ingredients: Array<TIngredientsType> | [];
-  ingredientsRequest: boolean;
-  ingredientsFailed: boolean;
-  ingredientsLoaded: boolean;
-};
+import { TBurgerIngredientsType } from '../../utils/types';
 
 const IngredientDetails = () => {
   const location = useLocation<any>();

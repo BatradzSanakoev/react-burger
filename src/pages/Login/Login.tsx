@@ -5,23 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import loginStyles from './Login.module.css';
 import { login } from '../../services/actions/user';
 import { RootState } from '../../services/reducers';
-
-type TAuthType = {
-  registerRequest: boolean;
-  registerError: boolean;
-  authRequest: boolean;
-  authError: boolean;
-  logoutRequest: boolean;
-  logoutError: boolean;
-  errorText: string | null;
-  getUserRequest: boolean;
-  getUserError: boolean;
-  getUserLoaded: boolean;
-  userUpdateRequest: boolean;
-  userUpdateError: boolean;
-  isAuth: boolean;
-  user: any;
-};
+import { TAuthType } from '../../utils/types';
 
 export const Login = () => {
   const history = useHistory();

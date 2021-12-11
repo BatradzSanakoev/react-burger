@@ -6,26 +6,9 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import burgerIngredient from './BurgerIngredient.module.css';
 import Count from '../Count/Count';
 import { RootState } from '../../services/reducers';
-
-type TBurgerIngredientType = {
-  _id: string;
-  name: string;
-  type: string;
-  image: string;
-  price: number;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-};
+import { TBurgerIngredientType, TBurgerConstructorType } from '../../utils/types';
 
 type TBurgerIngredientProps = Omit<TBurgerIngredientType, 'proteins' | 'fat' | 'carbohydrates' | 'calories'>;
-
-type TBurgerConstructorType = {
-  constructorBuns: TBurgerIngredientType | null;
-  constructorIngredients: Array<TBurgerIngredientType> | [];
-  constructorCount: number;
-};
 
 const BurgerIngredient = (props: TBurgerIngredientProps) => {
   const location = useLocation<any>();

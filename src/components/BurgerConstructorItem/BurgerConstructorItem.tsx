@@ -6,10 +6,10 @@ import burgerConstructorItem from './BurgerConstructorItem.module.css';
 import { decreaseConstructorCount, deleteConstructorIngredient, updateConstructorIngredients } from '../../services/actions/burgerConstructor';
 
 type TBurgerConstructorItemProps = {
-  uniqueKey?: number;
+  uniqueKey?: string;
   index?: number;
   type?: string;
-  image: string;
+  image?: string;
   name: string;
   price: number;
 };

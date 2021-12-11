@@ -1,15 +1,8 @@
 import React, { useRef, useState, ChangeEvent, FocusEvent } from 'react';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TCustomInputProps } from '../../utils/types';
 
-type TPasswordInputProps = {
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  name: string;
-  placeholder: string;
-  size?: 'small' | 'default' | undefined;
-};
-
-export const PasswordInput = ({ value, onChange, name, placeholder, size = 'default' }: TPasswordInputProps) => {
+export const PasswordInput = ({ value, onChange, name, placeholder, size = 'default' }: TCustomInputProps) => {
   const [fieldDisabled, setDisabled] = useState(true);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState(false);

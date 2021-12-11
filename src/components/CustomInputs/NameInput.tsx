@@ -1,15 +1,8 @@
 import React, { useRef, useState, ChangeEvent } from 'react';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TCustomInputProps } from '../../utils/types';
 
-type TNameInputProps = {
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  name: string;
-  placeholder: string;
-  size?: 'small' | 'default' | undefined;
-};
-
-export const NameInput = ({ value, onChange, name, placeholder, size = 'default' }: TNameInputProps) => {
+export const NameInput = ({ value, onChange, name, placeholder, size = 'default' }: TCustomInputProps) => {
   const [fieldDisabled, setDisabled] = useState(true);
   const [error, setError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);

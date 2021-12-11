@@ -13,46 +13,11 @@ import {
   addConstructorBun
 } from '../../services/actions/burgerConstructor';
 import { RootState } from '../../services/reducers';
+import { TAuthType, TBurgerIngredientType, TBurgerConstructorType } from '../../utils/types';
 
 type TBurgerConstructorProps = {
   onModalOpen: () => void;
   onModalType: () => void;
-};
-
-type TBurgerConstructorIngredient = {
-  _id: string;
-  name: string;
-  type: string;
-  image: string;
-  price: number;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-  key?: number;
-};
-
-type TBurgerConstructorType = {
-  constructorBuns: TBurgerConstructorIngredient | null;
-  constructorIngredients: Array<TBurgerConstructorIngredient> | [];
-  constructorCount: number;
-};
-
-type TAuthType = {
-  registerRequest: boolean;
-  registerError: boolean;
-  authRequest: boolean;
-  authError: boolean;
-  logoutRequest: boolean;
-  logoutError: boolean;
-  errorText: string | null;
-  getUserRequest: boolean;
-  getUserError: boolean;
-  getUserLoaded: boolean;
-  userUpdateRequest: boolean;
-  userUpdateError: boolean;
-  isAuth: boolean;
-  user: any;
 };
 
 const BurgerConstructor = (props: TBurgerConstructorProps) => {
@@ -83,7 +48,7 @@ const BurgerConstructor = (props: TBurgerConstructorProps) => {
     collect: monitor => ({
       isHover: monitor.isOver()
     }),
-    drop: (item: TBurgerConstructorIngredient) => {
+    drop: (item: TBurgerIngredientType) => {
       if (item.type === 'bun') dispatch(addConstructorBun(item));
       else dispatch(addConstructorIngredient(item));
       if (constructorBuns && item.type === 'bun') {

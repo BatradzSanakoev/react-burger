@@ -5,23 +5,7 @@ import { useSelector } from 'react-redux';
 import resetPassword from './ResetPassword.module.css';
 import { MAIN_API } from '../../utils/constants';
 import { RootState } from '../../services/reducers';
-
-type TAuthType = {
-  registerRequest: boolean;
-  registerError: boolean;
-  authRequest: boolean;
-  authError: boolean;
-  logoutRequest: boolean;
-  logoutError: boolean;
-  errorText: string | null;
-  getUserRequest: boolean;
-  getUserError: boolean;
-  getUserLoaded: boolean;
-  userUpdateRequest: boolean;
-  userUpdateError: boolean;
-  isAuth: boolean;
-  user: any;
-};
+import { TAuthType } from '../../utils/types';
 
 export const ResetPassword = () => {
   const history = useHistory();
