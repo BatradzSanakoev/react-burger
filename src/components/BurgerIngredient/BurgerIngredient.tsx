@@ -7,17 +7,23 @@ import burgerIngredient from './BurgerIngredient.module.css';
 import Count from '../Count/Count';
 import { RootState } from '../../services/reducers';
 
-type TBurgerIngredientProps = {
+type TBurgerIngredientType = {
   _id: string;
   name: string;
   type: string;
   image: string;
   price: number;
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
 };
 
+type TBurgerIngredientProps = Omit<TBurgerIngredientType, 'proteins' | 'fat' | 'carbohydrates' | 'calories'>;
+
 type TBurgerConstructorType = {
-  constructorBuns: (TBurgerIngredientProps & { proteins: number; fat: number; carbohydrates: number; calories: number }) | null;
-  constructorIngredients: Array<(TBurgerIngredientProps & { proteins: number; fat: number; carbohydrates: number; calories: number }) | []>;
+  constructorBuns: TBurgerIngredientType | null;
+  constructorIngredients: Array<TBurgerIngredientType> | [];
   constructorCount: number;
 };
 
@@ -35,7 +41,7 @@ const BurgerIngredient = (props: TBurgerIngredientProps) => {
 
   const ingredientCount = useMemo(() => {
     let count = 0;
-    constructorIngredients.forEach((item: any) => {
+    constructorIngredients.forEach(item => {
       if (item._id === props._id) count = count + 1;
     });
     return count;
