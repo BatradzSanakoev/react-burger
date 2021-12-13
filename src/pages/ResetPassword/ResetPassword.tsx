@@ -1,34 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 import resetPassword from './ResetPassword.module.css';
 import { MAIN_API } from '../../utils/constants';
+import { RootState } from '../../services/reducers';
+import { TAuthType } from '../../utils/types';
 
 export const ResetPassword = () => {
   const history = useHistory();
   const location = useLocation();
-  const { isAuth, getUserRequest } = useSelector(state => state.user);
+  const { isAuth, getUserRequest } = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
   const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
-  const passwordRef = useRef();
+  const passwordRef = useRef<HTMLInputElement>(null);
 
-  const onChange = e => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     target.name === 'code' ? setCode(target.value) : setPassword(target.value);
   };
 
   const onIconClick = () => {
     setShowPassword(!showPassword);
-    if (!showPassword) setTimeout(() => passwordRef.current.focus(), 0);
+    if (!showPassword) setTimeout(() => passwordRef.current?.focus(), 0);
   };
 
-  const handlePasswordOverlayClick = e => {
+  const handlePasswordOverlayClick = (e: any) => {
     if (showPassword && e.currentTarget.classList.value !== 'input__icon input__icon-action') setShowPassword(!showPassword);
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch(`${MAIN_API}/password-reset/reset`, {
       method: 'POST',
@@ -50,8 +52,8 @@ export const ResetPassword = () => {
 
   if (getUserRequest) return null;
   else if (!getUserRequest && isAuth) {
-    return <Redirect to={location.state?.from || '/profile'} />;
-  } else if (!location.state?.forgotPageVisited) return <Redirect to={'/forgot-password'} />;
+    return <Redirect to={(location as any).state?.from || '/profile'} />;
+  } else if (!(location as any).state?.forgotPageVisited) return <Redirect to={'/forgot-password'} />;
 
   return (
     <main className={resetPassword.section} onClick={handlePasswordOverlayClick}>
@@ -83,6 +85,7 @@ export const ResetPassword = () => {
             />
           </div>
           <Input type='text' placeholder='Введите код из письма' name='code' value={code || ''} onChange={onChange} />
+          {/* @ts-ignore */}
           <Button type='primary' size='medium' disabled={!password || !code}>
             Восстановить
           </Button>

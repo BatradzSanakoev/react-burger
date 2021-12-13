@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,22 +7,23 @@ import { updateUser, logout } from '../../services/actions/user';
 import { PasswordInput } from '../../components/CustomInputs/PasswordInput';
 import { EmailInput } from '../../components/CustomInputs/EmailInput';
 import { NameInput } from '../../components/CustomInputs/NameInput';
+import { RootState } from '../../services/reducers';
+import { TAuthType } from '../../utils/types';
 
 export const Profile = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
+  const user = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('Batradz777');
 
-  const onChange = e => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     target.name === 'email' ? setEmail(target.value) : target.name === 'name' ? setName(target.value) : setPassword(target.value);
   };
 
-  const cancelClick = e => {
-    e.preventDefault();
+  const cancelClick = () => {
     setEmail(user.user.email);
     setName(user.user.name);
     setPassword('Batradz777');
@@ -33,8 +34,7 @@ export const Profile = () => {
     history.replace('/login');
   };
 
-  const saveUserInfo = e => {
-    e.preventDefault();
+  const saveUserInfo = () => {
     if (email !== user.user.email || name !== user.user.name) dispatch(updateUser({ email: email, name: name, password: password }));
   };
 

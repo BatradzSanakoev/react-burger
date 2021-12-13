@@ -1,15 +1,21 @@
 import React, { useMemo } from 'react';
 import { useDrag } from 'react-dnd';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useHistory, useLocation } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredient from './BurgerIngredient.module.css';
 import Count from '../Count/Count';
+import { RootState } from '../../services/reducers';
+import { TBurgerIngredientType, TBurgerConstructorType } from '../../utils/types';
 
-const BurgerIngredient = props => {
+type TBurgerIngredientProps = Omit<TBurgerIngredientType, 'proteins' | 'fat' | 'carbohydrates' | 'calories'>;
+
+const BurgerIngredient = (props: TBurgerIngredientProps) => {
+  const location = useLocation<any>();
   const history = useHistory();
-  const { constructorBuns, constructorIngredients } = useSelector(state => state.burgerConstructor);
+  const { constructorBuns, constructorIngredients } = useSelector(
+    (state: Omit<RootState, 'burgerConstructor'> & { burgerConstructor: TBurgerConstructorType }) => state.burgerConstructor
+  );
 
   const bunsCount = useMemo(() => {
     if (!constructorBuns) return;
@@ -27,7 +33,7 @@ const BurgerIngredient = props => {
   const handleClick = () => {
     history.replace({
       pathname: `/ingredients/${props._id}`,
-      state: { fromSite: true }
+      state: { background: location }
     });
   };
 
@@ -52,13 +58,6 @@ const BurgerIngredient = props => {
       </p>
     </div>
   );
-};
-
-BurgerIngredient.propTypes = {
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  type: PropTypes.string
 };
 
 export default BurgerIngredient;

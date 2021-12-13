@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
@@ -25,8 +25,10 @@ import { GET_USER_FAILED } from '../../services/types';
 const App = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [modalDisplay, setModalDisplay] = useState(false);
-  const [modalType, setModalType] = React.useState(null);
+  const location = useLocation<any>();
+  const background = location.state?.background;
+  const [modalDisplay, setModalDisplay] = useState<boolean>(false);
+  const [modalType, setModalType] = useState<string | null>(null);
 
   const handleOpenModal = useCallback(() => {
     setModalDisplay(true);
@@ -53,12 +55,12 @@ const App = () => {
   return (
     <>
       {modalDisplay && (
-        <Modal onModalClose={handleCloseModal} type={modalType} modalDisplay={modalDisplay}>
+        <Modal onModalClose={handleCloseModal} type={modalType}>
           <OrderDetails />
         </Modal>
       )}
       <AppHeader />
-      <Switch>
+      <Switch location={background ?? location}>
         <Route path='/' exact>
           <main className={appStyles.main}>
             <div className={appStyles.content}>
@@ -84,18 +86,17 @@ const App = () => {
         <ProtectedRoute path='/profile'>
           <Profile />
         </ProtectedRoute>
-        <Route path='/ingredients/:id' render={({ location: { state } }) => !state?.fromSite && <IngredientDetails />} />
+        <Route path='/ingredients/:id'>
+          <IngredientDetails />
+        </Route>
       </Switch>
-      <Route
-        path='/ingredients/:id'
-        render={({ location: { state } }) =>
-          state?.fromSite && (
-            <Modal onModalClose={handleCloseModal} type={'ingredient'}>
-              <IngredientDetails />
-            </Modal>
-          )
-        }
-      />
+      {background && (
+        <Route path='/ingredients/:id'>
+          <Modal onModalClose={handleCloseModal} type={'ingredient'}>
+            <IngredientDetails />
+          </Modal>
+        </Route>
+      )}
     </>
   );
 };

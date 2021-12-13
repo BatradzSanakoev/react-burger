@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, ChangeEvent, FocusEvent } from 'react';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TCustomInputProps } from '../../utils/types';
 
-export const PasswordInput = ({ value, onChange, name, size = 'default' }) => {
+export const PasswordInput = ({ value, onChange, name, placeholder, size = 'default' }: TCustomInputProps) => {
   const [fieldDisabled, setDisabled] = useState(true);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onIconClick = () => {
     setDisabled(false);
@@ -13,7 +14,7 @@ export const PasswordInput = ({ value, onChange, name, size = 'default' }) => {
     setTimeout(() => inputRef.current?.focus(), 0);
   };
 
-  const validateField = value => {
+  const validateField = (value: string) => {
     setError(value.length < 6);
   };
 
@@ -21,8 +22,8 @@ export const PasswordInput = ({ value, onChange, name, size = 'default' }) => {
     setError(false);
   };
 
-  const onBlur = e => {
-    if (e.target.value) {
+  const onBlur = (e?: FocusEvent<HTMLInputElement, Element> | undefined): void => {
+    if (e?.target.value) {
       validateField(e.target.value);
     } else {
       setError(false);
@@ -34,7 +35,7 @@ export const PasswordInput = ({ value, onChange, name, size = 'default' }) => {
   return (
     <Input
       type={visible ? 'text' : 'password'}
-      placeholder='Пароль'
+      placeholder={placeholder}
       onChange={onChange}
       icon={visible ? 'CloseIcon' : 'EditIcon'}
       value={value}

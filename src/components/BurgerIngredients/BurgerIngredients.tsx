@@ -1,16 +1,19 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
 import burgerIngredients from './BurgerIngredients.module.css';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
+import { RootState } from '../../services/reducers';
+import { TBurgerIngredientsType } from '../../utils/types';
 
 const BurgerIngredients = () => {
-  const data = useSelector(state => state.burgerIngredients.ingredients);
-  const tabsRef = useRef();
-  const bunsRef = useRef();
-  const saucesRef = useRef();
-  const mainsRef = useRef();
+  const data = useSelector(
+    (state: Omit<RootState, 'burgerIngredients'> & { burgerIngredients: TBurgerIngredientsType }) => state.burgerIngredients.ingredients
+  );
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const bunsRef = useRef<HTMLDivElement>(null);
+  const saucesRef = useRef<HTMLDivElement>(null);
+  const mainsRef = useRef<HTMLDivElement>(null);
   const [currentTab, setCurrentTab] = useState('bun');
   const buns = useMemo(() => {
     return data.filter(item => item.type === 'bun');
@@ -23,10 +26,10 @@ const BurgerIngredients = () => {
   }, [data]);
 
   const checkActualTab = () => {
-    const tabsTop = tabsRef.current.getBoundingClientRect().top;
-    const bunsDistance = Math.abs(tabsTop - bunsRef.current.getBoundingClientRect().top);
-    const saucesDistance = Math.abs(tabsTop - saucesRef.current.getBoundingClientRect().top);
-    const mainsDistance = Math.abs(tabsTop - mainsRef.current.getBoundingClientRect().top);
+    const tabsTop = tabsRef.current!.getBoundingClientRect().top;
+    const bunsDistance = Math.abs(tabsTop! - bunsRef.current!.getBoundingClientRect().top);
+    const saucesDistance = Math.abs(tabsTop! - saucesRef.current!.getBoundingClientRect().top);
+    const mainsDistance = Math.abs(tabsTop! - mainsRef.current!.getBoundingClientRect().top);
     const minValue = Math.min(bunsDistance, saucesDistance, mainsDistance);
     if (minValue === bunsDistance) {
       setCurrentTab('bun');
@@ -43,13 +46,13 @@ const BurgerIngredients = () => {
         Соберите бургер
       </h1>
       <div className={`${burgerIngredients.tabs} mt-5`} ref={tabsRef}>
-        <Tab value='bun' active={currentTab === 'bun'}>
+        <Tab value='bun' active={currentTab === 'bun'} onClick={() => console.log('tabclick')}>
           Булки
         </Tab>
-        <Tab value='sauce' active={currentTab === 'sauce'}>
+        <Tab value='sauce' active={currentTab === 'sauce'} onClick={() => console.log('tabclick')}>
           Соусы
         </Tab>
-        <Tab value='main' active={currentTab === 'main'}>
+        <Tab value='main' active={currentTab === 'main'} onClick={() => console.log('tabclick')}>
           Начинка
         </Tab>
       </div>
@@ -60,18 +63,7 @@ const BurgerIngredients = () => {
           </h2>
           <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={bunsRef}>
             {buns.map(item => (
-              <BurgerIngredient
-                key={item._id}
-                _id={item._id}
-                type={item.type}
-                image={item.image_large}
-                price={item.price}
-                name={item.name}
-                proteins={item.proteins}
-                fat={item.fat}
-                carbohydrates={item.carbohydrates}
-                calories={item.calories}
-              />
+              <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
             ))}
           </div>
           <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>
@@ -79,18 +71,7 @@ const BurgerIngredients = () => {
           </h2>
           <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={saucesRef}>
             {sauces.map(item => (
-              <BurgerIngredient
-                key={item._id}
-                _id={item._id}
-                type={item.type}
-                image={item.image_large}
-                price={item.price}
-                name={item.name}
-                proteins={item.proteins}
-                fat={item.fat}
-                carbohydrates={item.carbohydrates}
-                calories={item.calories}
-              />
+              <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
             ))}
           </div>
           <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>
@@ -98,18 +79,7 @@ const BurgerIngredients = () => {
           </h2>
           <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={mainsRef}>
             {main.map(item => (
-              <BurgerIngredient
-                key={item._id}
-                _id={item._id}
-                type={item.type}
-                image={item.image_large}
-                price={item.price}
-                name={item.name}
-                proteins={item.proteins}
-                fat={item.fat}
-                carbohydrates={item.carbohydrates}
-                calories={item.calories}
-              />
+              <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
             ))}
           </div>
         </div>

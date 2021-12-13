@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector, useDispatch } from 'react-redux';
 import registerStyles from './Register.module.css';
 import { emailRegex } from '../../utils/constants';
 import { register } from '../../services/actions/user';
+import { RootState } from '../../services/reducers';
+import { TAuthType } from '../../utils/types';
 
 export const Register = () => {
   const dispatch = useDispatch();
-  const { user, isAuth, getUserRequest } = useSelector(state => state.user);
+  const { user, isAuth, getUserRequest } = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
   const history = useHistory();
   const location = useLocation();
   const [username, setUsername] = useState('');
@@ -17,12 +19,12 @@ export const Register = () => {
   const [emailError, setEmailError] = useState(false);
   const errorText = 'Некорректный email';
 
-  const onChange = e => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     target.name === 'email' ? setEmail(target.value) : target.name === 'username' ? setUsername(target.value) : setPassword(target.value);
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(register({ email: email, name: username, password: password, history: history }));
   };
@@ -30,7 +32,7 @@ export const Register = () => {
   useEffect(() => (email.length > 0 && !email.match(emailRegex) ? setEmailError(true) : setEmailError(false)), [email]);
 
   if (getUserRequest) return null;
-  else if (!getUserRequest && isAuth) return <Redirect to={location.state?.from || '/profile'} />;
+  else if (!getUserRequest && isAuth) return <Redirect to={(location as any).state?.from || '/profile'} />;
 
   return (
     <main className={registerStyles.section}>
@@ -40,6 +42,7 @@ export const Register = () => {
           <Input type='text' placeholder='Имя' name='username' value={username || ''} onChange={onChange} />
           <Input type='email' placeholder='E-mail' name='email' value={email || ''} onChange={onChange} error={emailError} errorText={errorText} />
           <PasswordInput name='password' value={password || ''} onChange={onChange} />
+          {/* @ts-ignore */}
           <Button type='primary' size='medium' disabled={!email || emailError || !password || !username || user.registerError}>
             Вход
           </Button>

@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import ModalOverlay from '../ModalOverlay/ModalOverlay';
 import modal from './Modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-const modalRoot = document.getElementById('modals');
+type TModalProps = {
+  children: ReactNode;
+  onModalClose: () => void;
+  type: string | null;
+};
 
-const Modal = ({ children, onModalClose, type }) => {
+const modalRoot: HTMLElement | null = document.getElementById('modals');
+
+const Modal = ({ children, onModalClose, type }: TModalProps) => {
   const modalHeightValue = type === 'order' ? '90%' : '70%';
 
-  const closeByEscape = e => {
-    e.code === 'Escape' && onModalClose(); 
+  const closeByEscape = (e: KeyboardEvent) => {
+    e.code === 'Escape' && onModalClose();
   };
 
   useEffect(() => {
@@ -27,7 +33,7 @@ const Modal = ({ children, onModalClose, type }) => {
         {children}
       </div>
     </ModalOverlay>,
-    modalRoot
+    modalRoot!
   );
 };
 

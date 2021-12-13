@@ -1,10 +1,12 @@
 import React from 'react';
 import countStyles from './Count.module.css';
 
-const Count = ({ count }) => {
+type TCountProps = { count: number | boolean | undefined };
+
+const Count = ({ count }: TCountProps) => {
   return (
     <>
-      {count > 0 && (
+      {count! > 0 && (
         <div className={countStyles.element}>
           <p className='text text_type_main-small'>{count}</p>
         </div>

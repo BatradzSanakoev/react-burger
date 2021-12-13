@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, ChangeEvent } from 'react';
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TCustomInputProps } from '../../utils/types';
 
-export const NameInput = ({ value, onChange, name, size = 'default' }) => {
+export const NameInput = ({ value, onChange, name, placeholder, size = 'default' }: TCustomInputProps) => {
   const [fieldDisabled, setDisabled] = useState(true);
   const [error, setError] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onIconClick = () => {
     setDisabled(false);
@@ -22,7 +23,7 @@ export const NameInput = ({ value, onChange, name, size = 'default' }) => {
   return (
     <Input
       type='text'
-      placeholder='Имя'
+      placeholder={placeholder}
       onChange={onChange}
       icon={!fieldDisabled ? 'CloseIcon' : 'EditIcon'}
       value={value}
