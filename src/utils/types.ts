@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from 'react';
+import { TUser } from '../services/reducers/user';
 
 export type TAuthType = {
   registerRequest: boolean;
@@ -23,6 +24,7 @@ export type TBurgerIngredientType = {
   type: string;
   image?: string;
   image_large?: string;
+  image_mobile?: string;
   price: number;
   proteins: number;
   fat: number;
@@ -50,4 +52,10 @@ export type TCustomInputProps = {
   name: string;
   placeholder: string;
   size?: 'small' | 'default' | undefined;
+};
+
+export type TRes = {
+  success: boolean;
+  user?: TUser;
+  order?: any;
 };

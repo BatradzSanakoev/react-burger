@@ -16,5 +16,6 @@
   "trailingComma": "none",
   "useTabs": false,
   "vueIndentScriptAndStyle": false,
-  "parser": "typescript"
+  "parser": "typescript",
+  "embeddedLanguageFormatting": "auto"
 }

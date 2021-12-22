@@ -16,7 +16,26 @@ import {
   USER_UPDATE_FAILED
 } from '../types';
 
-const initialState = {
+type TInitialState = {
+  registerRequest: boolean;
+  registerError: boolean;
+  authRequest: boolean;
+  authError: boolean;
+  logoutRequest: boolean;
+  logoutError: boolean;
+  errorText: string | null;
+  getUserRequest: boolean;
+  getUserError: boolean;
+  getUserLoaded: boolean;
+  userUpdateRequest: boolean;
+  userUpdateError: boolean;
+  isAuth: boolean;
+  user: TUser | null;
+};
+
+export type TUser = { email: string; name: string };
+
+const initialState: TInitialState = {
   registerRequest: false,
   registerError: false,
   authRequest: false,
@@ -30,9 +49,10 @@ const initialState = {
   userUpdateRequest: false,
   userUpdateError: false,
   isAuth: false,
-  user: {}
+  user: null
 };
 
+// @ts-ignore
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case REGISTER_REQUEST: {

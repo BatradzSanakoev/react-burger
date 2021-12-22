@@ -1,12 +1,21 @@
 import { GET_BURGER_INGREDIENTS_REQUEST, GET_BURGER_INGREDIENTS_SUCCESS, GET_BURGER_INGREDIENTS_FAILED } from '../types';
+import { TBurgerIngredientType } from '../../utils/types';
 
-const initialState = {
-  ingredients: [],
-  ingredientsRequest: false,
-  ingredientsFailed: false,
-  ingredientsLoaded: false,
+type TInitialState = {
+  ingredients: Array<TBurgerIngredientType> | null;
+  ingredientsRequest: boolean;
+  ingredientsFailed: boolean;
+  ingredientsLoaded: boolean;
 };
 
+const initialState: TInitialState = {
+  ingredients: null,
+  ingredientsRequest: false,
+  ingredientsFailed: false,
+  ingredientsLoaded: false
+};
+
+//@ts-ignore
 export const burgerIngredientsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_BURGER_INGREDIENTS_REQUEST: {

@@ -1,11 +1,18 @@
 import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, CLEAR_ORDER } from '../types';
 
-const initialState = {
+type TInitialState = {
+  orderNumber: number | null;
+  orderRequest: Boolean;
+  orderFailed: Boolean;
+};
+
+const initialState: TInitialState = {
   orderNumber: null,
   orderRequest: false,
   orderFailed: false
 };
 
+// @ts-ignore
 export const orderReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ORDER_REQUEST: {
