@@ -2,8 +2,8 @@ import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, CLEAR_ORDER } f
 
 type TInitialState = {
   orderNumber: number | null;
-  orderRequest: Boolean;
-  orderFailed: Boolean;
+  orderRequest: boolean;
+  orderFailed: boolean;
 };
 
 const initialState: TInitialState = {

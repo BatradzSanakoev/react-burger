@@ -1,15 +1,11 @@
 import React, { useRef, useState, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/hooks';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredients from './BurgerIngredients.module.css';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
-import { RootState } from '../../services/reducers';
-import { TBurgerIngredientsType } from '../../utils/types';
 
 const BurgerIngredients = () => {
-  const data = useSelector(
-    (state: Omit<RootState, 'burgerIngredients'> & { burgerIngredients: TBurgerIngredientsType }) => state.burgerIngredients.ingredients
-  );
+  const data = useSelector(state => state.burgerIngredients.ingredients);
   const tabsRef = useRef<HTMLDivElement>(null);
   const bunsRef = useRef<HTMLDivElement>(null);
   const saucesRef = useRef<HTMLDivElement>(null);
