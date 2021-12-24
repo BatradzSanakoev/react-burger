@@ -1,5 +1,4 @@
 import React, { ChangeEvent } from 'react';
-import { TUser } from '../services/reducers/user';
 
 export type TAuthType = {
   registerRequest: boolean;
@@ -58,4 +57,13 @@ export type TRes = {
   success: boolean;
   user?: TUser;
   order?: any;
+};
+
+export type TUser = { email: string; name: string };
+
+export type TRefresh = {
+  success: boolean;
+  accessToken?: string | undefined;
+  refreshToken?: string | undefined;
+  message?: string | undefined;
 };

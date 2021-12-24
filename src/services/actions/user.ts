@@ -17,12 +17,28 @@ import {
 } from '../types';
 import { MAIN_API, setCookies, getCookie, retriableFetch } from '../../utils/constants';
 import { AppThunk, AppDispatch } from '../reducers';
-import { TRes } from '../../utils/types';
+import { TRes, TUser, TRefresh } from '../../utils/types';
+
+type TRegisterActions = { readonly type: typeof REGISTER_REQUEST | typeof REGISTER_SUCCESS | typeof REGISTER_FAILED };
+type TLoginActions = {
+  readonly type: typeof AUTH_REQUEST | typeof AUTH_SUCCESS | typeof AUTH_FAILED;
+  payload?: TUser | null | undefined;
+};
+type TLogoutActions = { readonly type: typeof LOGOUT_REQUEST | typeof LOGOUT_SUCCESS | typeof LOGOUT_FAILED };
+type TGetUserActions = {
+  readonly type: typeof GET_USER_REQUEST | typeof GET_USER_SUCCESS | typeof GET_USER_FAILED;
+  payload?: TUser;
+};
+type TUpdateUser = Omit<TGetUserActions, 'type'> & {
+  readonly type: typeof USER_UPDATE_REQUEST | typeof USER_UPDATE_SUCCESS | typeof USER_UPDATE_FAILED;
+};
+
+export type TUserActions = TRegisterActions | TLoginActions | TLogoutActions | TGetUserActions | TUpdateUser;
 
 export const register: AppThunk =
   ({ email, password, name, history }) =>
   (dispatch: AppDispatch) => {
-    dispatch({
+    dispatch<TRegisterActions>({
       type: REGISTER_REQUEST
     });
     fetch(`${MAIN_API}/auth/register`, {
@@ -42,17 +58,17 @@ export const register: AppThunk =
       })
       .then(res => {
         if (res.success) {
-          dispatch({ type: REGISTER_SUCCESS });
+          dispatch<TRegisterActions>({ type: REGISTER_SUCCESS });
           history.push('/login');
         } else Promise.reject(res);
       })
-      .catch(() => dispatch({ type: REGISTER_FAILED }));
+      .catch(() => dispatch<TRegisterActions>({ type: REGISTER_FAILED }));
   };
 
 export const login: AppThunk =
   ({ email, password, history }) =>
   (dispatch: AppDispatch) => {
-    dispatch({ type: AUTH_REQUEST });
+    dispatch<TLoginActions>({ type: AUTH_REQUEST });
     fetch(`${MAIN_API}/auth/login`, {
       method: 'POST',
       headers: {
@@ -70,17 +86,17 @@ export const login: AppThunk =
       .then(res => {
         if (res.success) {
           setCookies(res);
-          dispatch({
+          dispatch<TLoginActions>({
             type: AUTH_SUCCESS,
             payload: res.user
           });
           history.push('/');
         } else Promise.reject(res);
       })
-      .catch(() => dispatch({ type: AUTH_FAILED }));
+      .catch(() => dispatch<TLoginActions>({ type: AUTH_FAILED }));
   };
 
-export const refresh = () => {
+export const refresh = (): Promise<TRefresh> => {
   const refreshToken = getCookie('refreshToken');
   return fetch(`${MAIN_API}/auth/token`, {
     method: 'POST',
@@ -98,7 +114,7 @@ export const refresh = () => {
 
 export const logout: AppThunk = () => (dispatch: AppDispatch) => {
   const refreshToken = getCookie('refreshToken');
-  dispatch({ type: LOGOUT_REQUEST });
+  dispatch<TLogoutActions>({ type: LOGOUT_REQUEST });
   fetch(`${MAIN_API}/auth/logout`, {
     method: 'POST',
     headers: {
@@ -113,15 +129,15 @@ export const logout: AppThunk = () => (dispatch: AppDispatch) => {
       else return res.json().then(err => Promise.reject(err));
     })
     .then(res => {
-      if (res.success) dispatch({ type: LOGOUT_SUCCESS });
+      if (res.success) dispatch<TLogoutActions>({ type: LOGOUT_SUCCESS });
       else Promise.reject(res);
     })
-    .catch(() => dispatch({ type: LOGOUT_FAILED }));
+    .catch(() => dispatch<TLogoutActions>({ type: LOGOUT_FAILED }));
 };
 
 export const getUser: AppThunk = () => (dispatch: AppDispatch) => {
   const accessToken = getCookie('accessToken');
-  dispatch({ type: GET_USER_REQUEST });
+  dispatch<TGetUserActions>({ type: GET_USER_REQUEST });
   retriableFetch<TRes>(`${MAIN_API}/auth/user`, {
     headers: {
       'Content-type': 'application/json',
@@ -130,20 +146,20 @@ export const getUser: AppThunk = () => (dispatch: AppDispatch) => {
   })
     .then(res => {
       if (res.success)
-        dispatch({
+        dispatch<TGetUserActions>({
           type: GET_USER_SUCCESS,
           payload: res.user
         });
       else Promise.reject(res);
     })
-    .catch(() => dispatch({ type: GET_USER_FAILED }));
+    .catch(() => dispatch<TGetUserActions>({ type: GET_USER_FAILED }));
 };
 
 export const updateUser: AppThunk =
   ({ email, password, name }) =>
   (dispatch: AppDispatch) => {
     const accessToken = getCookie('accessToken');
-    dispatch({ type: USER_UPDATE_REQUEST });
+    dispatch<TUpdateUser>({ type: USER_UPDATE_REQUEST });
     retriableFetch<TRes>(`${MAIN_API}/auth/user`, {
       method: 'PATCH',
       headers: {
@@ -158,11 +174,11 @@ export const updateUser: AppThunk =
     })
       .then(res => {
         if (res.success)
-          dispatch({
+          dispatch<TUpdateUser>({
             type: USER_UPDATE_SUCCESS,
             payload: res.user
           });
         else Promise.reject(res);
       })
-      .catch(() => dispatch({ type: USER_UPDATE_FAILED }));
+      .catch(() => dispatch<TUpdateUser>({ type: USER_UPDATE_FAILED }));
   };

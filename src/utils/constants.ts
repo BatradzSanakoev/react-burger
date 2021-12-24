@@ -1,4 +1,5 @@
 import { refresh } from '../services/actions/user';
+import { TRefresh } from './types';
 
 export const MAIN_API = 'https://norma.nomoreparties.space/api';
 export const emailRegex =
@@ -11,8 +12,8 @@ export const getCookie = (name: string) => {
   return name === 'accessToken' ? token.slice(12) : token.slice(13);
 };
 
-export const setCookies = (data: { accessToken: string; refreshToken: string }) => {
-  document.cookie = `accessToken=${data.accessToken.slice(7)}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+export const setCookies = (data: TRefresh) => {
+  document.cookie = `accessToken=${data.accessToken!.slice(7)}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
   document.cookie = `refreshToken=${data.refreshToken}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
 };
 

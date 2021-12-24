@@ -15,6 +15,8 @@ import {
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAILED
 } from '../types';
+import { TUser } from '../../utils/types';
+import { TUserActions } from '../actions/user';
 
 type TInitialState = {
   registerRequest: boolean;
@@ -30,10 +32,8 @@ type TInitialState = {
   userUpdateRequest: boolean;
   userUpdateError: boolean;
   isAuth: boolean;
-  user: TUser | null;
+  user: TUser | null | undefined | {};
 };
-
-export type TUser = { email: string; name: string };
 
 const initialState: TInitialState = {
   registerRequest: false,
@@ -52,8 +52,7 @@ const initialState: TInitialState = {
   user: null
 };
 
-// @ts-ignore
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action: TUserActions): TInitialState => {
   switch (action.type) {
     case REGISTER_REQUEST: {
       return {

@@ -12,13 +12,13 @@ const BurgerIngredients = () => {
   const mainsRef = useRef<HTMLDivElement>(null);
   const [currentTab, setCurrentTab] = useState('bun');
   const buns = useMemo(() => {
-    return data.filter(item => item.type === 'bun');
+    return data!.filter(item => item.type === 'bun');
   }, [data]);
   const sauces = useMemo(() => {
-    return data.filter(item => item.type === 'sauce');
+    return data!.filter(item => item.type === 'sauce');
   }, [data]);
   const main = useMemo(() => {
-    return data.filter(item => item.type === 'main');
+    return data!.filter(item => item.type === 'main');
   }, [data]);
 
   const checkActualTab = () => {
@@ -52,7 +52,7 @@ const BurgerIngredients = () => {
           Начинка
         </Tab>
       </div>
-      {data.length > 0 ? (
+      {data!.length > 0 ? (
         <div className={burgerIngredients.categories} onScroll={checkActualTab}>
           <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>
             Булки
