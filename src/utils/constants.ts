@@ -17,6 +17,13 @@ export const setCookies = (data: TRefresh) => {
   document.cookie = `refreshToken=${data.refreshToken}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
 };
 
+export const deleteCookies = () => {
+  const accessToken = getCookie('accessToken');
+  const refreshToken = getCookie('refreshToken');
+  document.cookie = `accessToken=${accessToken}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+  document.cookie = `refreshToken=${refreshToken}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+};
+
 export const retriableFetch = async <ReturnType>(url: RequestInfo, options?: RequestInit | undefined | any): Promise<ReturnType> => {
   try {
     return await fetch(url, options).then(async res => {

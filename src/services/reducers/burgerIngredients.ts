@@ -3,7 +3,7 @@ import { TBurgerIngredientType } from '../../utils/types';
 import { TGetBurgerIngredientsActions } from '../actions/burgerIngredients';
 
 type TInitialState = {
-  ingredients: Array<TBurgerIngredientType> | null | undefined;
+  ingredients: Array<TBurgerIngredientType> | null;
   ingredientsRequest: boolean;
   ingredientsFailed: boolean;
   ingredientsLoaded: boolean;

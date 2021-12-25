@@ -5,7 +5,6 @@ import { burgerIngredientReducer } from './burgerIngredient';
 import { burgerConstructorReducer } from './burgerConstructor';
 import { burgerIngredientsReducer } from './burgerIngredients';
 import { userReducer } from './user';
-import { types } from '@babel/core';
 import { store } from '../store';
 
 export const rootReducer = combineReducers({
@@ -17,5 +16,5 @@ export const rootReducer = combineReducers({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
-export type AppThunk<ReturnType = void> = ActionCreator<ThunkAction<ReturnType, RootState, unknown, AnyAction>>;
+export type AppThunk<ReturnType = void> = ActionCreator<ThunkAction<ReturnType, RootState, unknown, Action>>;
 export type AppDispatch = typeof store.dispatch;

@@ -12,13 +12,13 @@ const BurgerIngredients = () => {
   const mainsRef = useRef<HTMLDivElement>(null);
   const [currentTab, setCurrentTab] = useState('bun');
   const buns = useMemo(() => {
-    return data!.filter(item => item.type === 'bun');
+    return data && data.filter(item => item.type === 'bun');
   }, [data]);
   const sauces = useMemo(() => {
-    return data!.filter(item => item.type === 'sauce');
+    return data && data.filter(item => item.type === 'sauce');
   }, [data]);
   const main = useMemo(() => {
-    return data!.filter(item => item.type === 'main');
+    return data && data.filter(item => item.type === 'main');
   }, [data]);
 
   const checkActualTab = () => {
@@ -52,31 +52,34 @@ const BurgerIngredients = () => {
           Начинка
         </Tab>
       </div>
-      {data!.length > 0 ? (
+      {data ? (
         <div className={burgerIngredients.categories} onScroll={checkActualTab}>
           <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>
             Булки
           </h2>
           <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={bunsRef}>
-            {buns.map(item => (
-              <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
-            ))}
+            {buns &&
+              buns.map(item => (
+                <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
+              ))}
           </div>
           <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>
             Соусы
           </h2>
           <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={saucesRef}>
-            {sauces.map(item => (
-              <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
-            ))}
+            {sauces &&
+              sauces.map(item => (
+                <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
+              ))}
           </div>
           <h2 className='mt-10 text text_type_main-medium' style={{ marginBottom: 0 }}>
             Начинка
           </h2>
           <div className={`${burgerIngredients.category} pl-4 mt-6`} ref={mainsRef}>
-            {main.map(item => (
-              <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
-            ))}
+            {main &&
+              main.map(item => (
+                <BurgerIngredient key={item._id} _id={item._id} type={item.type} image={item.image_large} price={item.price} name={item.name} />
+              ))}
           </div>
         </div>
       ) : (

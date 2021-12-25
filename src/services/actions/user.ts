@@ -15,32 +15,111 @@ import {
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAILED
 } from '../types';
-import { MAIN_API, setCookies, getCookie, retriableFetch } from '../../utils/constants';
+import { MAIN_API, setCookies, getCookie, retriableFetch, deleteCookies } from '../../utils/constants';
 import { AppThunk, AppDispatch } from '../reducers';
 import { TRes, TUser, TRefresh } from '../../utils/types';
 
-type TRegisterActions = { readonly type: typeof REGISTER_REQUEST | typeof REGISTER_SUCCESS | typeof REGISTER_FAILED };
-type TLoginActions = {
-  readonly type: typeof AUTH_REQUEST | typeof AUTH_SUCCESS | typeof AUTH_FAILED;
-  payload?: TUser | null | undefined;
-};
-type TLogoutActions = { readonly type: typeof LOGOUT_REQUEST | typeof LOGOUT_SUCCESS | typeof LOGOUT_FAILED };
-type TGetUserActions = {
-  readonly type: typeof GET_USER_REQUEST | typeof GET_USER_SUCCESS | typeof GET_USER_FAILED;
-  payload?: TUser;
-};
-type TUpdateUser = Omit<TGetUserActions, 'type'> & {
-  readonly type: typeof USER_UPDATE_REQUEST | typeof USER_UPDATE_SUCCESS | typeof USER_UPDATE_FAILED;
+type TRegisterActionRequest = { readonly type: typeof REGISTER_REQUEST };
+type TRegisterActionSuccess = { readonly type: typeof REGISTER_SUCCESS };
+type TRegisterActionFailed = { readonly type: typeof REGISTER_FAILED };
+
+type TLoginActionRequest = { readonly type: typeof AUTH_REQUEST };
+type TLoginActionSuccess = { readonly type: typeof AUTH_SUCCESS; readonly payload: TUser };
+type TLoginActionFailed = { readonly type: typeof AUTH_FAILED };
+
+type TLogoutActionRequest = { readonly type: typeof LOGOUT_REQUEST };
+type TLogoutActionSuccess = { readonly type: typeof LOGOUT_SUCCESS };
+type TLogoutActionFailed = { readonly type: typeof LOGOUT_FAILED };
+
+type TGetUserActionRequest = { readonly type: typeof GET_USER_REQUEST };
+type TGetUserActionSuccess = { readonly type: typeof GET_USER_SUCCESS; payload: TUser };
+type TGetUserActionFailed = { readonly type: typeof GET_USER_FAILED };
+
+type TUpdateUserActionRequest = { readonly type: typeof USER_UPDATE_REQUEST };
+type TUpdateUserActionSuccess = { readonly type: typeof USER_UPDATE_SUCCESS; payload: TUser };
+type TUpdateUserActionFailed = { readonly type: typeof USER_UPDATE_FAILED };
+
+export type TUserActions =
+  | TRegisterActionRequest
+  | TRegisterActionSuccess
+  | TRegisterActionFailed
+  | TLoginActionRequest
+  | TLoginActionSuccess
+  | TLoginActionFailed
+  | TLogoutActionRequest
+  | TLogoutActionSuccess
+  | TLogoutActionFailed
+  | TGetUserActionRequest
+  | TGetUserActionSuccess
+  | TGetUserActionFailed
+  | TUpdateUserActionRequest
+  | TUpdateUserActionSuccess
+  | TUpdateUserActionFailed;
+
+const registerRequest = (): TRegisterActionRequest => {
+  return { type: REGISTER_REQUEST };
 };
 
-export type TUserActions = TRegisterActions | TLoginActions | TLogoutActions | TGetUserActions | TUpdateUser;
+const registerSuccess = (): TRegisterActionSuccess => {
+  return { type: REGISTER_SUCCESS };
+};
+
+const registerFailed = (): TRegisterActionFailed => {
+  return { type: REGISTER_FAILED };
+};
+
+const loginRequest = (): TLoginActionRequest => {
+  return { type: AUTH_REQUEST };
+};
+
+const loginSuccess = (user: TUser): TLoginActionSuccess => {
+  return { type: AUTH_SUCCESS, payload: user };
+};
+
+const loginFailed = (): TLoginActionFailed => {
+  return { type: AUTH_FAILED };
+};
+
+const logoutRequest = (): TLogoutActionRequest => {
+  return { type: LOGOUT_REQUEST };
+};
+
+const logoutSuccess = (): TLogoutActionSuccess => {
+  return { type: LOGOUT_SUCCESS };
+};
+
+const logoutFailed = (): TLogoutActionFailed => {
+  return { type: LOGOUT_FAILED };
+};
+
+const getUserRequest = (): TGetUserActionRequest => {
+  return { type: GET_USER_REQUEST };
+};
+
+const getUserSuccess = (user: TUser): TGetUserActionSuccess => {
+  return { type: GET_USER_SUCCESS, payload: user };
+};
+
+const getUserFailed = (): TGetUserActionFailed => {
+  return { type: GET_USER_FAILED };
+};
+
+const updateUserRequest = (): TUpdateUserActionRequest => {
+  return { type: USER_UPDATE_REQUEST };
+};
+
+const updateUserSuccess = (user: TUser): TUpdateUserActionSuccess => {
+  return { type: USER_UPDATE_SUCCESS, payload: user };
+};
+
+const updateUserFailed = (): TUpdateUserActionFailed => {
+  return { type: USER_UPDATE_FAILED };
+};
 
 export const register: AppThunk =
   ({ email, password, name, history }) =>
   (dispatch: AppDispatch) => {
-    dispatch<TRegisterActions>({
-      type: REGISTER_REQUEST
-    });
+    dispatch(registerRequest());
     fetch(`${MAIN_API}/auth/register`, {
       method: 'POST',
       headers: {
@@ -58,17 +137,17 @@ export const register: AppThunk =
       })
       .then(res => {
         if (res.success) {
-          dispatch<TRegisterActions>({ type: REGISTER_SUCCESS });
+          dispatch(registerSuccess());
           history.push('/login');
         } else Promise.reject(res);
       })
-      .catch(() => dispatch<TRegisterActions>({ type: REGISTER_FAILED }));
+      .catch(() => dispatch(registerFailed()));
   };
 
 export const login: AppThunk =
   ({ email, password, history }) =>
   (dispatch: AppDispatch) => {
-    dispatch<TLoginActions>({ type: AUTH_REQUEST });
+    dispatch(loginRequest());
     fetch(`${MAIN_API}/auth/login`, {
       method: 'POST',
       headers: {
@@ -86,14 +165,11 @@ export const login: AppThunk =
       .then(res => {
         if (res.success) {
           setCookies(res);
-          dispatch<TLoginActions>({
-            type: AUTH_SUCCESS,
-            payload: res.user
-          });
+          dispatch(loginSuccess(res.user));
           history.push('/');
         } else Promise.reject(res);
       })
-      .catch(() => dispatch<TLoginActions>({ type: AUTH_FAILED }));
+      .catch(() => dispatch(loginFailed()));
   };
 
 export const refresh = (): Promise<TRefresh> => {
@@ -114,7 +190,7 @@ export const refresh = (): Promise<TRefresh> => {
 
 export const logout: AppThunk = () => (dispatch: AppDispatch) => {
   const refreshToken = getCookie('refreshToken');
-  dispatch<TLogoutActions>({ type: LOGOUT_REQUEST });
+  dispatch(logoutRequest());
   fetch(`${MAIN_API}/auth/logout`, {
     method: 'POST',
     headers: {
@@ -129,15 +205,17 @@ export const logout: AppThunk = () => (dispatch: AppDispatch) => {
       else return res.json().then(err => Promise.reject(err));
     })
     .then(res => {
-      if (res.success) dispatch<TLogoutActions>({ type: LOGOUT_SUCCESS });
-      else Promise.reject(res);
+      if (res.success) {
+        deleteCookies();
+        dispatch(logoutSuccess());
+      } else Promise.reject(res);
     })
-    .catch(() => dispatch<TLogoutActions>({ type: LOGOUT_FAILED }));
+    .catch(() => dispatch(logoutFailed()));
 };
 
 export const getUser: AppThunk = () => (dispatch: AppDispatch) => {
   const accessToken = getCookie('accessToken');
-  dispatch<TGetUserActions>({ type: GET_USER_REQUEST });
+  dispatch(getUserRequest());
   retriableFetch<TRes>(`${MAIN_API}/auth/user`, {
     headers: {
       'Content-type': 'application/json',
@@ -145,21 +223,17 @@ export const getUser: AppThunk = () => (dispatch: AppDispatch) => {
     }
   })
     .then(res => {
-      if (res.success)
-        dispatch<TGetUserActions>({
-          type: GET_USER_SUCCESS,
-          payload: res.user
-        });
+      if (res.success) dispatch(getUserSuccess(res.user!));
       else Promise.reject(res);
     })
-    .catch(() => dispatch<TGetUserActions>({ type: GET_USER_FAILED }));
+    .catch(() => dispatch(getUserFailed()));
 };
 
 export const updateUser: AppThunk =
   ({ email, password, name }) =>
   (dispatch: AppDispatch) => {
     const accessToken = getCookie('accessToken');
-    dispatch<TUpdateUser>({ type: USER_UPDATE_REQUEST });
+    dispatch(updateUserRequest());
     retriableFetch<TRes>(`${MAIN_API}/auth/user`, {
       method: 'PATCH',
       headers: {
@@ -173,12 +247,8 @@ export const updateUser: AppThunk =
       })
     })
       .then(res => {
-        if (res.success)
-          dispatch<TUpdateUser>({
-            type: USER_UPDATE_SUCCESS,
-            payload: res.user
-          });
+        if (res.success) dispatch(updateUserSuccess(res.user!));
         else Promise.reject(res);
       })
-      .catch(() => dispatch<TUpdateUser>({ type: USER_UPDATE_FAILED }));
+      .catch(() => dispatch(updateUserFailed()));
   };

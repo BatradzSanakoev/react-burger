@@ -63,7 +63,7 @@ export type TUser = { email: string; name: string };
 
 export type TRefresh = {
   success: boolean;
-  accessToken?: string | undefined;
-  refreshToken?: string | undefined;
-  message?: string | undefined;
+  accessToken?: string;
+  refreshToken?: string;
+  message?: string;
 };

@@ -32,7 +32,7 @@ type TInitialState = {
   userUpdateRequest: boolean;
   userUpdateError: boolean;
   isAuth: boolean;
-  user: TUser | null | undefined | {};
+  user: TUser | null;
 };
 
 const initialState: TInitialState = {
@@ -113,7 +113,7 @@ export const userReducer = (state = initialState, action: TUserActions): TInitia
         logoutRequest: false,
         logoutError: false,
         isAuth: false,
-        user: {},
+        user: null,
         errorText: ''
       };
     }

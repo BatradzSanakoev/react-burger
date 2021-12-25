@@ -1,21 +1,18 @@
 import React, { useMemo } from 'react';
 import { useDrag } from 'react-dnd';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/hooks';
 import { useHistory, useLocation } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredient from './BurgerIngredient.module.css';
 import Count from '../Count/Count';
-import { RootState } from '../../services/reducers';
-import { TBurgerIngredientType, TBurgerConstructorType } from '../../utils/types';
+import { TBurgerIngredientType } from '../../utils/types';
 
 type TBurgerIngredientProps = Omit<TBurgerIngredientType, 'proteins' | 'fat' | 'carbohydrates' | 'calories'>;
 
 const BurgerIngredient = (props: TBurgerIngredientProps) => {
   const location = useLocation<any>();
   const history = useHistory();
-  const { constructorBuns, constructorIngredients } = useSelector(
-    (state: Omit<RootState, 'burgerConstructor'> & { burgerConstructor: TBurgerConstructorType }) => state.burgerConstructor
-  );
+  const { constructorBuns, constructorIngredients } = useSelector(state => state.burgerConstructor);
 
   const bunsCount = useMemo(() => {
     if (!constructorBuns) return;

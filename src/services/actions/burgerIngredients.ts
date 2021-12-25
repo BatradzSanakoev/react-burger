@@ -13,22 +13,15 @@ export type TGetBurgerIngredientsActions =
   | TGetBurgerIngredientsActionFailed;
 
 const getBurgerIngredientsRequest = (): TGetBurgerIngredientsActionRequest => {
-  return {
-    type: GET_BURGER_INGREDIENTS_REQUEST
-  };
+  return { type: GET_BURGER_INGREDIENTS_REQUEST };
 };
 
 const getBurgerIngredientsSuccess = (data: Array<TBurgerIngredientType>): TGetBurgerIngredientsActionSuccess => {
-  return {
-    type: GET_BURGER_INGREDIENTS_SUCCESS,
-    payload: data
-  };
+  return { type: GET_BURGER_INGREDIENTS_SUCCESS, payload: data };
 };
 
 const getBurgerIngredientsFailed = (): TGetBurgerIngredientsActionFailed => {
-  return {
-    type: GET_BURGER_INGREDIENTS_FAILED
-  };
+  return { type: GET_BURGER_INGREDIENTS_FAILED };
 };
 
 export const getBurgerIngredients: AppThunk = () => (dispatch: AppDispatch) => {

@@ -1,21 +1,15 @@
-import React, { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useMemo } from 'react';
+import { useSelector } from '../../services/hooks';
 import { useParams, Redirect, useLocation } from 'react-router-dom';
 import ingredientDetails from './IngredientDetails.module.css';
-import { RootState } from '../../services/reducers';
-import { TBurgerIngredientsType } from '../../utils/types';
 
 const IngredientDetails = () => {
   const location = useLocation<any>();
   const { id } = useParams<{ id: string }>();
-  const data = useSelector(
-    (state: Omit<RootState, 'burgerIngredients'> & { burgerIngredients: TBurgerIngredientsType }) => state.burgerIngredients.ingredients
-  );
-  const { ingredientsLoaded } = useSelector(
-    (state: Omit<RootState, 'burgerIngredients'> & { burgerIngredients: TBurgerIngredientsType }) => state.burgerIngredients
-  );
+  const data = useSelector(state => state.burgerIngredients.ingredients);
+  const { ingredientsLoaded } = useSelector(state => state.burgerIngredients);
   const currentIngredient = useMemo(() => {
-    return data.find(item => item._id === id);
+    return data!.find(item => item._id === id);
   }, [data]);
 
   if (!ingredientsLoaded) return null;

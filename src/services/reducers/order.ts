@@ -1,3 +1,4 @@
+import { TOrderActions } from '../actions/order';
 import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, CLEAR_ORDER } from '../types';
 
 type TInitialState = {
@@ -12,8 +13,7 @@ const initialState: TInitialState = {
   orderFailed: false
 };
 
-// @ts-ignore
-export const orderReducer = (state = initialState, action) => {
+export const orderReducer = (state = initialState, action: TOrderActions): TInitialState => {
   switch (action.type) {
     case GET_ORDER_REQUEST: {
       return {
