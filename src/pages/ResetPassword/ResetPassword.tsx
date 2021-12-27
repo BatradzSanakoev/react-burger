@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useRef, ChangeEvent, FormEvent } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/hooks';
 import resetPassword from './ResetPassword.module.css';
 import { MAIN_API } from '../../utils/constants';
-import { RootState } from '../../services/reducers';
-import { TAuthType } from '../../utils/types';
 
 export const ResetPassword = () => {
   const history = useHistory();
   const location = useLocation();
-  const { isAuth, getUserRequest } = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
+  const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');

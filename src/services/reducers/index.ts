@@ -1,7 +1,6 @@
 import { combineReducers, Action, ActionCreator, AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { orderReducer } from './order';
-import { burgerIngredientReducer } from './burgerIngredient';
 import { burgerConstructorReducer } from './burgerConstructor';
 import { burgerIngredientsReducer } from './burgerIngredients';
 import { userReducer } from './user';
@@ -9,7 +8,6 @@ import { store } from '../store';
 
 export const rootReducer = combineReducers({
   burgerIngredients: burgerIngredientsReducer,
-  burgerIngredient: burgerIngredientReducer,
   burgerConstructor: burgerConstructorReducer,
   order: orderReducer,
   user: userReducer

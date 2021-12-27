@@ -9,7 +9,7 @@ const IngredientDetails = () => {
   const data = useSelector(state => state.burgerIngredients.ingredients);
   const { ingredientsLoaded } = useSelector(state => state.burgerIngredients);
   const currentIngredient = useMemo(() => {
-    return data!.find(item => item._id === id);
+    return data && data.find(item => item._id === id);
   }, [data]);
 
   if (!ingredientsLoaded) return null;

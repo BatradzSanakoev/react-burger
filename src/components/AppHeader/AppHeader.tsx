@@ -13,8 +13,8 @@ const AppHeader = () => {
             <BurgerIcon type={`${pathname === '/' ? 'primary' : 'secondary'}`} />
             <p className={`text text_type_main-medium ml-2 ${appHeader.navText}`}>Конструктор</p>
           </NavLink>
-          <NavLink to='/orders' className={`${appHeader.navButton} pt-4 pb-4 pl-5 pr-5`} activeClassName={appHeader.activeNavButton}>
-            <ListIcon type={`${pathname === '/orders' ? 'primary' : 'secondary'}`} />
+          <NavLink to='/feed' className={`${appHeader.navButton} pt-4 pb-4 pl-5 pr-5`} activeClassName={appHeader.activeNavButton}>
+            <ListIcon type={`${pathname === '/feed' ? 'primary' : 'secondary'}`} />
             <p className={`text text_type_main-medium ml-2 ${appHeader.navText}`}>Лента заказов</p>
           </NavLink>
         </div>

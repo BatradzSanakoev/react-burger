@@ -17,10 +17,12 @@ import { Register } from '../../pages/Register/Register';
 import { ForgotPassword } from '../../pages/ForgotPassword/ForgotPassword';
 import { ResetPassword } from '../../pages/ResetPassword/ResetPassword';
 import { Profile } from '../../pages/Profile/Profile';
+import { Feed } from '../../pages/Feed/Feed';
 import { getUser } from '../../services/actions/user';
 import { getCookie } from '../../utils/constants';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import { GET_USER_FAILED } from '../../services/types';
+import { FeedDetails } from '../../pages/FeedDetails/FeedDetails';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -70,6 +72,15 @@ const App = () => {
               </DndProvider>
             </div>
           </main>
+        </Route>
+        <Route path='/feed' exact>
+          <Feed />
+        </Route>
+        <Route path='/feed/:id' exact>
+          <FeedDetails />
+        </Route>
+        <Route path='/profile/orders/:id' exact>
+          <FeedDetails />
         </Route>
         <Route path='/login' exact>
           <Login />

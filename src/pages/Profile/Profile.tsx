@@ -1,5 +1,5 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, Switch, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import profile from './Profile.module.css';
@@ -9,6 +9,7 @@ import { EmailInput } from '../../components/CustomInputs/EmailInput';
 import { NameInput } from '../../components/CustomInputs/NameInput';
 import { RootState } from '../../services/reducers';
 import { TAuthType } from '../../utils/types';
+import { OrderCard } from '../../components/OrderCard/OrderCard';
 
 export const Profile = () => {
   const history = useHistory();
@@ -69,21 +70,35 @@ export const Profile = () => {
             В этом разделе вы можете изменить свои персональные данные
           </p>
         </div>
-        <div className={profile.profileColumn}>
-          <div className={profile.profileInfo}>
-            <NameInput placeholder='Имя' name='name' value={name} onChange={onChange} />
-            <EmailInput placeholder='Логин' name='email' value={email} onChange={onChange} />
-            <PasswordInput placeholder='Пароль' name='password' value={password} onChange={onChange} />
-            <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <Button size='medium' type='secondary' onClick={cancelClick}>
-                Отмена
-              </Button>
-              <Button size='medium' type='primary' onClick={saveUserInfo}>
-                Сохранить
-              </Button>
+        <Switch>
+          <Route path='/profile' exact>
+            <div className={profile.profileColumn}>
+              <div className={profile.profileInfo}>
+                <NameInput placeholder='Имя' name='name' value={name} onChange={onChange} />
+                <EmailInput placeholder='Логин' name='email' value={email} onChange={onChange} />
+                <PasswordInput placeholder='Пароль' name='password' value={password} onChange={onChange} />
+                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                  <Button size='medium' type='secondary' onClick={cancelClick}>
+                    Отмена
+                  </Button>
+                  <Button size='medium' type='primary' onClick={saveUserInfo}>
+                    Сохранить
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </Route>
+          <Route path='/profile/orders'>
+            <div style={{ width: '70%' }}>
+              <div className={profile.ordersList}>
+                <OrderCard id={'034535'} />
+                <OrderCard id={'034535'} />
+                <OrderCard id={'034535'} />
+                <OrderCard id={'034535'} />
+              </div>
+            </div>
+          </Route>
+        </Switch>
       </div>
     </main>
   );
