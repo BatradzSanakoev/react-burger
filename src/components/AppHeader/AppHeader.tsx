@@ -13,7 +13,7 @@ const AppHeader = () => {
             <BurgerIcon type={`${pathname === '/' ? 'primary' : 'secondary'}`} />
             <p className={`text text_type_main-medium ml-2 ${appHeader.navText}`}>Конструктор</p>
           </NavLink>
-          <NavLink to='/feed' className={`${appHeader.navButton} pt-4 pb-4 pl-5 pr-5`} activeClassName={appHeader.activeNavButton}>
+          <NavLink exact to='/feed' className={`${appHeader.navButton} pt-4 pb-4 pl-5 pr-5`} activeClassName={appHeader.activeNavButton}>
             <ListIcon type={`${pathname === '/feed' ? 'primary' : 'secondary'}`} />
             <p className={`text text_type_main-medium ml-2 ${appHeader.navText}`}>Лента заказов</p>
           </NavLink>
@@ -22,7 +22,7 @@ const AppHeader = () => {
           <Logo />
         </Link>
         <div className={`${appHeader.navGroup}`} style={{ justifyContent: 'flex-end' }}>
-          <NavLink to='/profile' className={`${appHeader.navButton} pt-4 pb-4 pl-5 pr-5`} activeClassName={appHeader.activeNavButton}>
+          <NavLink exact to='/profile' className={`${appHeader.navButton} pt-4 pb-4 pl-5 pr-5`} activeClassName={appHeader.activeNavButton}>
             <ProfileIcon type={`${pathname.includes('/profile') ? 'primary' : 'secondary'}`} />
             <p className={`text text_type_main-medium ml-2 ${appHeader.navText}`}>Личный кабинет</p>
           </NavLink>

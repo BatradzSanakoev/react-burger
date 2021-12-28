@@ -7,7 +7,7 @@ import { login } from '../../services/actions/user';
 
 export const Login = () => {
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<any>();
   const dispatch = useDispatch();
   const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [email, setEmail] = useState('');

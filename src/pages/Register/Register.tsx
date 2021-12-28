@@ -10,7 +10,7 @@ export const Register = () => {
   const dispatch = useDispatch();
   const { user, isAuth, getUserRequest, errorText, registerError } = useSelector(state => state.user);
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<any>();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

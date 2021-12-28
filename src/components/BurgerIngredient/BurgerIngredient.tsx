@@ -30,7 +30,7 @@ const BurgerIngredient = (props: TBurgerIngredientProps) => {
   const handleClick = () => {
     history.replace({
       pathname: `/ingredients/${props._id}`,
-      state: { background: location }
+      state: { backgroundForIngredient: location }
     });
   };
 

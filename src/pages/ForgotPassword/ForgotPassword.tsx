@@ -7,7 +7,7 @@ import { MAIN_API, emailRegex } from '../../utils/constants';
 
 export const ForgotPassword = () => {
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<any>();
   const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);

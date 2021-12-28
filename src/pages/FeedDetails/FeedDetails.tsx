@@ -1,13 +1,23 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import feedDetails from './FeedDetails.module.css';
 
 export const FeedDetails = () => {
+  const location = useLocation<any>();
   const { id } = useParams<{ id: string }>();
+  const backgroundForFeed = location.state?.backgroundForFeed;
+  const backgroundForProfile = location.state?.backgroundForProfile;
   return (
-    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ width: '35%', height: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <div style={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <div
+        style={{
+          width: `${backgroundForFeed || backgroundForProfile ? '80%' : '35%'}`,
+          height: '80vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}>
         <p className='text text_type_digits-default' style={{ textAlign: 'center' }}>{`#${id}`}</p>
         <div>
           <p className='text text_type_main-medium'>Death Star Starship Main бургер</p>

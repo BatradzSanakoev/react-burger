@@ -7,7 +7,7 @@ import { MAIN_API } from '../../utils/constants';
 
 export const ResetPassword = () => {
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<any>();
   const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState('');
