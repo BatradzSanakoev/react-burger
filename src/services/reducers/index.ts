@@ -5,11 +5,13 @@ import { burgerConstructorReducer } from './burgerConstructor';
 import { burgerIngredientsReducer } from './burgerIngredients';
 import { userReducer } from './user';
 import { store } from '../store';
+import { ordersReducer } from './orders';
 
 export const rootReducer = combineReducers({
   burgerIngredients: burgerIngredientsReducer,
   burgerConstructor: burgerConstructorReducer,
   order: orderReducer,
+  orders: ordersReducer,
   user: userReducer
 });
 

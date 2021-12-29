@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import feed from './Feed.module.css';
 import { OrderCard } from '../../components/OrderCard/OrderCard';
+import { useDispatch, useSelector } from '../../services/hooks';
+import { GetOrdersAll } from '../../services/actions/orders';
 
 export const Feed = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(GetOrdersAll());
+  }, []);
   return (
     <div className={feed.main}>
       <div style={{ width: '87%' }}>

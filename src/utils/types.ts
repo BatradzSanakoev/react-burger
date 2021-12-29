@@ -67,3 +67,13 @@ export type TRefresh = {
   refreshToken?: string;
   message?: string;
 };
+
+export type TOrder = {
+  createdAt: string;
+  ingredients: Array<string>;
+  name: string;
+  number: number;
+  status: string;
+  updatedAt: string;
+  _id: string;
+};
