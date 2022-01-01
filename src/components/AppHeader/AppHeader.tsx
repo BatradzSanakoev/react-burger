@@ -22,7 +22,7 @@ const AppHeader = () => {
           <Logo />
         </Link>
         <div className={`${appHeader.navGroup}`} style={{ justifyContent: 'flex-end' }}>
-          <NavLink exact to='/profile' className={`${appHeader.navButton} pt-4 pb-4 pl-5 pr-5`} activeClassName={appHeader.activeNavButton}>
+          <NavLink to='/profile' className={`${appHeader.navButton} pt-4 pb-4 pl-5 pr-5`} activeClassName={appHeader.activeNavButton}>
             <ProfileIcon type={`${pathname.includes('/profile') ? 'primary' : 'secondary'}`} />
             <p className={`text text_type_main-medium ml-2 ${appHeader.navText}`}>Личный кабинет</p>
           </NavLink>

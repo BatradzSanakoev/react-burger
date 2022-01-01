@@ -164,7 +164,9 @@ export const login: AppThunk =
       })
       .then(res => {
         if (res.success) {
-          setCookies(res);
+          const accessToken = res.accessToken.split('Bearer ')[1];
+          setCookies('accessToken', accessToken);
+          setCookies('refreshToken', res.refreshToken);
           dispatch(loginSuccess(res.user));
           history.push('/');
         } else Promise.reject(res);
@@ -206,7 +208,8 @@ export const logout: AppThunk = () => (dispatch: AppDispatch) => {
     })
     .then(res => {
       if (res.success) {
-        deleteCookies();
+        deleteCookies('accessToken');
+        deleteCookies('refreshToken');
         dispatch(logoutSuccess());
       } else Promise.reject(res);
     })

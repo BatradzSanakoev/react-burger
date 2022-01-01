@@ -5,23 +5,53 @@ export const MAIN_API = 'https://norma.nomoreparties.space/api';
 export const emailRegex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+// export const getCookie = (name: string) => {
+//   const cookies = document.cookie.split('; ');
+//   const token = cookies.find(cookie => (cookie.indexOf(name) !== -1 ? cookie : null));
+//   console.log(document.cookie);
+//   if (token === undefined) return;
+//   return name === 'accessToken' ? token.slice(12) : token.slice(13);
+// };
+
 export const getCookie = (name: string) => {
-  const cookies = document.cookie.split('; ');
-  const token = cookies.find(cookie => (cookie.indexOf(name) !== -1 ? cookie : null));
-  if (token === undefined) return;
-  return name === 'accessToken' ? token.slice(12) : token.slice(13);
+  const matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-export const setCookies = (data: TRefresh) => {
-  document.cookie = `accessToken=${data.accessToken!.slice(7)}; path='/'; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
-  document.cookie = `refreshToken=${data.refreshToken}; path='/'; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+// export const setCookies = (data: TRefresh) => {
+//   document.cookie = `accessToken=${data.accessToken!.slice(7)}; path='/'; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+//   document.cookie = `refreshToken=${data.refreshToken}; path='/'; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+// };
+
+export const setCookies = (name: string, value: string | number | boolean | null | undefined, props: any = {}) => {
+  props = {
+    path: '/',
+    expires: 'Fri, 31 Dec 9999 23:59:59 GMT',
+    ...props
+  };
+  let exp = props.expires;
+  if (typeof exp == 'number' && exp) {
+    const d = new Date();
+    d.setTime(d.getTime() + exp * 1000);
+    exp = props.expires = d;
+  }
+  if (exp && exp.toUTCString) {
+    props.expires = exp.toUTCString();
+  }
+  value = encodeURIComponent(value!);
+  let updatedCookie = name + '=' + value;
+  for (const propName in props) {
+    updatedCookie += '; ' + propName;
+    const propValue = props[propName];
+    if (propValue !== true) {
+      updatedCookie += '=' + propValue;
+    }
+  }
+  document.cookie = updatedCookie;
 };
 
-export const deleteCookies = () => {
-  const accessToken = getCookie('accessToken');
-  const refreshToken = getCookie('refreshToken');
-  document.cookie = `accessToken=${accessToken}; path='/'; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
-  document.cookie = `refreshToken=${refreshToken}; path='/'; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+export const deleteCookies = (name: string) => {
+  setCookies(name, null, { expires: -1 });
 };
 
 export const retriableFetch = async <ReturnType>(url: RequestInfo, options?: RequestInit | undefined | any): Promise<ReturnType> => {
@@ -34,7 +64,8 @@ export const retriableFetch = async <ReturnType>(url: RequestInfo, options?: Req
   } catch (err) {
     if (err instanceof Error && err.message === 'jwt expired') {
       const refreshTokens = await refresh();
-      setCookies(refreshTokens);
+      setCookies('accessToken', refreshTokens.accessToken);
+      setCookies('refreshToken', refreshTokens.refreshToken);
       if (!options!.headers) {
         options!.headers = {};
       }

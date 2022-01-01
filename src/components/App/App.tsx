@@ -19,7 +19,7 @@ import { ResetPassword } from '../../pages/ResetPassword/ResetPassword';
 import { Profile } from '../../pages/Profile/Profile';
 import { Feed } from '../../pages/Feed/Feed';
 import { getUser } from '../../services/actions/user';
-import { getCookie } from '../../utils/constants';
+import { deleteCookies, getCookie } from '../../utils/constants';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import { GET_USER_FAILED } from '../../services/types';
 import { FeedDetails } from '../../pages/FeedDetails/FeedDetails';
