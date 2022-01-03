@@ -4,8 +4,8 @@ import { orderReducer } from './order';
 import { burgerConstructorReducer } from './burgerConstructor';
 import { burgerIngredientsReducer } from './burgerIngredients';
 import { userReducer } from './user';
-import { store } from '../store';
 import { ordersReducer } from './orders';
+import { store } from '../store';
 
 export const rootReducer = combineReducers({
   burgerIngredients: burgerIngredientsReducer,

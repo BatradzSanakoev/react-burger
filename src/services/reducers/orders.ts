@@ -1,6 +1,6 @@
-import { GET_ORDERS_ALL_REQUEST, GET_ORDERS_ALL_SUCCESS, GET_ORDERS_ALL_FAILED } from '../types';
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_SUCCESS, WS_GET_MESSAGE, WS_SEND_MESSAGE } from '../types';
 import { TOrder } from '../../utils/types';
-import { TGetOrdersActions } from '../actions/orders';
+import { TWSActions } from '../actions/orders';
 
 type TInitialState = {
   ordersAllRequest: boolean;
@@ -8,6 +8,8 @@ type TInitialState = {
   total: number;
   totalToday: number;
   orders: Array<TOrder>;
+  wsConnected: boolean;
+  error?: Event;
 };
 
 const initialState: TInitialState = {
@@ -15,33 +17,46 @@ const initialState: TInitialState = {
   ordersAllFailed: false,
   total: 0,
   totalToday: 0,
-  orders: []
+  orders: [],
+  wsConnected: false
 };
 
-export const ordersReducer = (state = initialState, action: TGetOrdersActions): TInitialState => {
+export const ordersReducer = (state = initialState, action: TWSActions): TInitialState => {
   switch (action.type) {
-    case GET_ORDERS_ALL_REQUEST: {
+    case WS_CONNECTION_START: {
       return {
         ...state,
-        ordersAllRequest: true,
-        ordersAllFailed: false
+        wsConnected: false
       };
     }
-    case GET_ORDERS_ALL_SUCCESS: {
+    case WS_CONNECTION_SUCCESS: {
       return {
         ...state,
-        ordersAllRequest: false,
-        ordersAllFailed: false,
+        error: undefined,
+        wsConnected: true
+      };
+    }
+    case WS_CONNECTION_ERROR: {
+      return {
+        ...state,
+        error: action.payload,
+        wsConnected: false
+      };
+    }
+    case WS_CONNECTION_CLOSED: {
+      return {
+        ...state,
+        error: undefined,
+        wsConnected: false
+      };
+    }
+    case WS_GET_MESSAGE: {
+      return {
+        ...state,
+        error: undefined,
         total: action.payload.total,
         totalToday: action.payload.totalToday,
         orders: action.payload.orders
-      };
-    }
-    case GET_ORDERS_ALL_FAILED: {
-      return {
-        ...state,
-        ordersAllRequest: false,
-        ordersAllFailed: true
       };
     }
     default: {

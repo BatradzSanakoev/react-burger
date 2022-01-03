@@ -19,7 +19,7 @@ import { ResetPassword } from '../../pages/ResetPassword/ResetPassword';
 import { Profile } from '../../pages/Profile/Profile';
 import { Feed } from '../../pages/Feed/Feed';
 import { getUser } from '../../services/actions/user';
-import { deleteCookies, getCookie } from '../../utils/constants';
+import { getCookie } from '../../utils/constants';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import { GET_USER_FAILED } from '../../services/types';
 import { FeedDetails } from '../../pages/FeedDetails/FeedDetails';
@@ -47,7 +47,7 @@ const App = () => {
     if (backgroundForIngredient) history.replace(backgroundForIngredient);
     if (backgroundForFeed) history.replace(backgroundForFeed);
     if (backgroundForProfile) history.replace(backgroundForProfile);
-  }, [modalType, location.state]);
+  }, [modalType, backgroundForIngredient, history, backgroundForFeed, backgroundForProfile, dispatch]);
 
   const handleSetOrderType = React.useCallback(() => {
     setModalType('order');

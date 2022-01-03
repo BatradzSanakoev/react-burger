@@ -175,6 +175,7 @@ export const login: AppThunk =
   };
 
 export const refresh = (): Promise<TRefresh> => {
+  console.log('refresh');
   const refreshToken = getCookie('refreshToken');
   return fetch(`${MAIN_API}/auth/token`, {
     method: 'POST',

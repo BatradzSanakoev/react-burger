@@ -55,6 +55,7 @@ export type TCustomInputProps = {
 
 export type TRes = {
   success: boolean;
+  message?: string;
   user?: TUser;
   order?: any;
 };
@@ -63,8 +64,8 @@ export type TUser = { email: string; name: string };
 
 export type TRefresh = {
   success: boolean;
-  accessToken?: string | number | boolean | null;
-  refreshToken?: string | number | boolean | null;
+  accessToken?: string;
+  refreshToken?: string;
   message?: string;
 };
 

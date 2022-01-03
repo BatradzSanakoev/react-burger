@@ -2,6 +2,7 @@ import { refresh } from '../services/actions/user';
 import { TRefresh } from './types';
 
 export const MAIN_API = 'https://norma.nomoreparties.space/api';
+export const WS_Url = 'wss://norma.nomoreparties.space/orders';
 export const emailRegex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -62,9 +63,11 @@ export const retriableFetch = async <ReturnType>(url: RequestInfo, options?: Req
       return await Promise.reject(err);
     });
   } catch (err) {
-    if (err instanceof Error && err.message === 'jwt expired') {
+    console.log(err);
+    if ((err as Error).message! === 'jwt expired') {
       const refreshTokens = await refresh();
-      setCookies('accessToken', refreshTokens.accessToken);
+      const accessToken = refreshTokens.accessToken!.split('Bearer ')[1];
+      setCookies('accessToken', accessToken);
       setCookies('refreshToken', refreshTokens.refreshToken);
       if (!options!.headers) {
         options!.headers = {};
@@ -77,4 +80,10 @@ export const retriableFetch = async <ReturnType>(url: RequestInfo, options?: Req
       });
     } else throw err;
   }
+};
+
+export const getDate = (date: string) => {
+  const currentDate = new Date();
+  if (date.slice(0, 10) === currentDate.toISOString().slice(0, 10)) return `Сегодня, ${date.slice(11, 16)} i-GMT+3`;
+  else return `${date.slice(0, 10)}, ${date.slice(11, 16)} i-GMT+3`;
 };
