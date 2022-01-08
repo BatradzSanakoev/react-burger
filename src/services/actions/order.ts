@@ -29,7 +29,7 @@ export const getOrder: AppThunk = itemsId => (dispatch: AppDispatch) => {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
-      Authorization: `Bearer ${accessToken}`
+      authorization: `Bearer ${accessToken}`
     },
     body: JSON.stringify({ ingredients: itemsId })
   })

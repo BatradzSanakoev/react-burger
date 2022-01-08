@@ -63,16 +63,16 @@ export const retriableFetch = async <ReturnType>(url: RequestInfo, options?: Req
       return await Promise.reject(err);
     });
   } catch (err) {
-    console.log(err);
     if ((err as Error).message! === 'jwt expired') {
       const refreshTokens = await refresh();
       const accessToken = refreshTokens.accessToken!.split('Bearer ')[1];
       setCookies('accessToken', accessToken);
       setCookies('refreshToken', refreshTokens.refreshToken);
+      console.log(refreshTokens);
       if (!options!.headers) {
         options!.headers = {};
       }
-      options!.headers.authorization = getCookie('refreshToken');
+      options!.headers.authorization = getCookie('accessToken');
       return await fetch(url, options).then(async res => {
         if (res.ok) return res.json() as Promise<ReturnType>;
         const err = (await res.json()) as Promise<ReturnType>;

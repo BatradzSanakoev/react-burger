@@ -223,7 +223,7 @@ export const getUser: AppThunk = () => (dispatch: AppDispatch) => {
   retriableFetch<TRes>(`${MAIN_API}/auth/user`, {
     headers: {
       'Content-type': 'application/json',
-      Authorization: `Bearer ${accessToken}`
+      authorization: `Bearer ${accessToken}`
     }
   })
     .then(res => {
@@ -242,7 +242,7 @@ export const updateUser: AppThunk =
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        authorization: `Bearer ${accessToken}`
       },
       body: JSON.stringify({
         email: email,
