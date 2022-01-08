@@ -1,5 +1,4 @@
 import { refresh } from '../services/actions/user';
-import { TRefresh } from './types';
 
 export const MAIN_API = 'https://norma.nomoreparties.space/api';
 export const WS_Url = 'wss://norma.nomoreparties.space/orders';
