@@ -1,17 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/hooks';
 import orderDetails from './OrderDetails.module.css';
 import doneIcon from '../../images/done.png';
-import { RootState } from '../../services/reducers';
-
-type TOrderDetailsProps = {
-  orderNumber: number | null;
-  orderRequest: boolean;
-  orderFailed: boolean;
-};
 
 const OrderDetails = () => {
-  const { orderNumber, orderRequest } = useSelector((state: Omit<RootState, 'order'> & { order: TOrderDetailsProps }) => state.order);
+  const { orderNumber, orderRequest } = useSelector(state => state.order);
   return (
     <>
       {!orderRequest ? (

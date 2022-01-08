@@ -1,16 +1,20 @@
-import { combineReducers } from 'redux';
+import { combineReducers, Action, ActionCreator, AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import { orderReducer } from './order';
-import { burgerIngredientReducer } from './burgerIngredient';
 import { burgerConstructorReducer } from './burgerConstructor';
 import { burgerIngredientsReducer } from './burgerIngredients';
 import { userReducer } from './user';
+import { ordersReducer } from './orders';
+import { store } from '../store';
 
 export const rootReducer = combineReducers({
   burgerIngredients: burgerIngredientsReducer,
-  burgerIngredient: burgerIngredientReducer,
   burgerConstructor: burgerConstructorReducer,
   order: orderReducer,
+  orders: ordersReducer,
   user: userReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
+export type AppThunk<ReturnType = void> = ActionCreator<ThunkAction<ReturnType, RootState, unknown, Action>>;
+export type AppDispatch = typeof store.dispatch;

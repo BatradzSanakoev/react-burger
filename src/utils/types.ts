@@ -23,6 +23,7 @@ export type TBurgerIngredientType = {
   type: string;
   image?: string;
   image_large?: string;
+  image_mobile?: string;
   price: number;
   proteins: number;
   fat: number;
@@ -50,4 +51,30 @@ export type TCustomInputProps = {
   name: string;
   placeholder: string;
   size?: 'small' | 'default' | undefined;
+};
+
+export type TRes = {
+  success: boolean;
+  message?: string;
+  user?: TUser;
+  order?: any;
+};
+
+export type TUser = { email: string; name: string };
+
+export type TRefresh = {
+  success: boolean;
+  accessToken?: string;
+  refreshToken?: string;
+  message?: string;
+};
+
+export type TOrder = {
+  createdAt: string;
+  ingredients: Array<string>;
+  name: string;
+  number: number;
+  status: string;
+  updatedAt: string;
+  _id: string;
 };

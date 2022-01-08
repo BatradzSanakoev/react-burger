@@ -1,23 +1,20 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/hooks';
 import registerStyles from './Register.module.css';
 import { emailRegex } from '../../utils/constants';
 import { register } from '../../services/actions/user';
-import { RootState } from '../../services/reducers';
-import { TAuthType } from '../../utils/types';
 
 export const Register = () => {
   const dispatch = useDispatch();
-  const { user, isAuth, getUserRequest } = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
+  const { user, isAuth, getUserRequest, errorText, registerError } = useSelector(state => state.user);
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<any>();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const errorText = 'Некорректный email';
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
@@ -40,14 +37,22 @@ export const Register = () => {
         <form onSubmit={onSubmit} noValidate className={registerStyles.form}>
           <h2 className='text text_type_main-large'>Регистрация</h2>
           <Input type='text' placeholder='Имя' name='username' value={username || ''} onChange={onChange} />
-          <Input type='email' placeholder='E-mail' name='email' value={email || ''} onChange={onChange} error={emailError} errorText={errorText} />
+          <Input
+            type='email'
+            placeholder='E-mail'
+            name='email'
+            value={email || ''}
+            onChange={onChange}
+            error={emailError}
+            errorText={'Некорректный email'}
+          />
           <PasswordInput name='password' value={password || ''} onChange={onChange} />
           {/* @ts-ignore */}
-          <Button type='primary' size='medium' disabled={!email || emailError || !password || !username || user.registerError}>
-            Вход
+          <Button type='primary' size='medium' disabled={!email || emailError || !password || !username || registerError}>
+            Зарегистрироваться
           </Button>
           <p className='text text_type_main-small mt-2' style={{ color: 'red' }}>
-            {user.errorText}
+            {errorText === 'Ошибка при регистрации' && errorText}
           </p>
         </form>
         <div>

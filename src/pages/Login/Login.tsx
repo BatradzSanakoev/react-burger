@@ -1,17 +1,15 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useHistory, Redirect, useLocation } from 'react-router-dom';
 import { PasswordInput, EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/hooks';
 import loginStyles from './Login.module.css';
 import { login } from '../../services/actions/user';
-import { RootState } from '../../services/reducers';
-import { TAuthType } from '../../utils/types';
 
 export const Login = () => {
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<any>();
   const dispatch = useDispatch();
-  const { isAuth, getUserRequest } = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
+  const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

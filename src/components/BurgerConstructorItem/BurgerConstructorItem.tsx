@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../services/hooks';
 import { useDrag, useDrop } from 'react-dnd';
 import { CurrencyIcon, DragIcon, LockIcon, DeleteIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerConstructorItem from './BurgerConstructorItem.module.css';
@@ -29,7 +29,7 @@ const BurgerConstructorItem = (props: TBurgerConstructorItemProps) => {
   };
 
   const handleDeleteIngredient = () => {
-    dispatch(deleteConstructorIngredient(props.uniqueKey));
+    dispatch(deleteConstructorIngredient(props.uniqueKey!));
     dispatch(decreaseConstructorCount());
   };
 
@@ -46,7 +46,7 @@ const BurgerConstructorItem = (props: TBurgerConstructorItemProps) => {
       const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
       if (dragIndex! < hoverIndex! && hoverClientY < hoverMiddleY) return;
       if (dragIndex! > hoverIndex! && hoverClientY > hoverMiddleY) return;
-      dispatch(updateConstructorIngredients(dragIndex, hoverIndex));
+      dispatch(updateConstructorIngredients(dragIndex!, hoverIndex!));
       item.index = hoverIndex;
     }
   });

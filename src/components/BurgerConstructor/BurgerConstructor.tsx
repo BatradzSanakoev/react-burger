@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/hooks';
 import { useDrop } from 'react-dnd';
 import { useHistory } from 'react-router-dom';
 import burgerConstructor from './BurgerConstructor.module.css';
@@ -12,8 +12,7 @@ import {
   decreaseConstructorCount,
   addConstructorBun
 } from '../../services/actions/burgerConstructor';
-import { RootState } from '../../services/reducers';
-import { TAuthType, TBurgerIngredientType, TBurgerConstructorType } from '../../utils/types';
+import { TBurgerIngredientType } from '../../utils/types';
 
 type TBurgerConstructorProps = {
   onModalOpen: () => void;
@@ -23,10 +22,8 @@ type TBurgerConstructorProps = {
 const BurgerConstructor = (props: TBurgerConstructorProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { constructorBuns, constructorIngredients } = useSelector(
-    (state: Omit<RootState, 'burgerConstructor'> & { burgerConstructor: TBurgerConstructorType }) => state.burgerConstructor
-  );
-  const { isAuth } = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
+  const { constructorBuns, constructorIngredients } = useSelector(state => state.burgerConstructor);
+  const { isAuth } = useSelector(state => state.user);
   const summaryPrice = useMemo(() => {
     let sum = 0;
     constructorIngredients.forEach(item => {

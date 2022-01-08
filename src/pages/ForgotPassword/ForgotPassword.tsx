@@ -1,16 +1,14 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/hooks';
 import forgotPassword from './ForgotPassword.module.css';
 import { MAIN_API, emailRegex } from '../../utils/constants';
-import { RootState } from '../../services/reducers';
-import { TAuthType } from '../../utils/types';
 
 export const ForgotPassword = () => {
   const history = useHistory();
-  const location = useLocation();
-  const { isAuth, getUserRequest } = useSelector((state: Omit<RootState, 'user'> & { user: TAuthType }) => state.user);
+  const location = useLocation<any>();
+  const { isAuth, getUserRequest } = useSelector(state => state.user);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const errorText = 'Некорректный email';
