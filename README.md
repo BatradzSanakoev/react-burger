@@ -1,4 +1,4 @@
-gh-pages of the roject https://batradzsanakoev.github.io/react-burger
+gh-pages of the roject https://batradzsanakoev.github.io/react-burger/
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
