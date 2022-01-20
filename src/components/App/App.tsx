@@ -49,7 +49,7 @@ const App = () => {
     if (backgroundForProfile) history.replace(backgroundForProfile);
   }, [modalType, backgroundForIngredient, history, backgroundForFeed, backgroundForProfile, dispatch]);
 
-  const handleSetOrderType = React.useCallback(() => {
+  const handleSetOrderType = useCallback(() => {
     setModalType('order');
   }, []);
 
@@ -57,10 +57,10 @@ const App = () => {
     if (getCookie('accessToken')) dispatch(getUser());
     else dispatch({ type: GET_USER_FAILED });
     dispatch(getBurgerIngredients());
-  }, []);
+  }, [dispatch]);
 
   return (
-    <div style={{ maxWidth: 1400}}>
+    <div>
       {modalDisplay && (
         <Modal onModalClose={handleCloseModal}>
           <OrderDetails />
@@ -120,7 +120,7 @@ const App = () => {
           </Modal>
         </Route>
       )}
-      {backgroundForProfile && getCookie('accessToken') && (
+      {backgroundForProfile && (
         <Route path='/profile/orders/:id' exact>
           <Modal onModalClose={handleCloseModal}>
             <FeedDetails />

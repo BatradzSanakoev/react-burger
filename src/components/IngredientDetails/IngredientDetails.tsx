@@ -15,7 +15,7 @@ const IngredientDetails = () => {
   if (!ingredientsLoaded) return null;
   else if (ingredientsLoaded && !currentIngredient) return <Redirect to='/' />;
   return (
-    <div className={ingredientDetails.container} style={{ height: `${!(location as any).state?.background && '90vh'}` }}>
+    <div className={ingredientDetails.container} >
       <h3 className={`text text_type_main-large mt-15`}>Детали ингредиента</h3>
       <img src={currentIngredient?.image_large} alt='ingredient-icon' className={ingredientDetails.image} />
       <p className={`text text_type_main-medium mt-4`}>{currentIngredient?.name}</p>
