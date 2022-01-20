@@ -1,8 +1,10 @@
 .modal {
     position: relative;
     width: 50%;
+    height: 70%;
     border-radius: 40px;    
     background-color: #1c1c21;
+    padding-bottom: 1rem;
 }
 
 .closeIcon {

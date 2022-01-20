@@ -46,14 +46,14 @@ export const FeedDetails = () => {
 
   if (!order) return null;
   return (
-    <div style={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <div
         style={{
           width: `${backgroundForFeed || backgroundForProfile ? '80%' : '35%'}`,
-          height: '80vh',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between'
+          justifyContent: 'space-evenly'
         }}>
         <p className='text text_type_digits-default' style={{ textAlign: 'center' }}>{`#${order?.number}`}</p>
         <div>

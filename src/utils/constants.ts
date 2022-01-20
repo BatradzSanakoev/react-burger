@@ -67,7 +67,6 @@ export const retriableFetch = async <ReturnType>(url: RequestInfo, options?: Req
       const accessToken = refreshTokens.accessToken!.split('Bearer ')[1];
       setCookies('accessToken', accessToken);
       setCookies('refreshToken', refreshTokens.refreshToken);
-      console.log(refreshTokens);
       if (!options!.headers) {
         options!.headers = {};
       }
