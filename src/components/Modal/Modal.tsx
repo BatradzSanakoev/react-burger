@@ -26,8 +26,8 @@ const Modal = ({ children, onModalClose, type }: TModalProps) => {
 
   return ReactDOM.createPortal(
     <ModalOverlay onModalClose={onModalClose}>
-      <div className={modal.modal} style={{ height: `${modalHeightValue}` }}>
-        <div className={modal.closeIcon} onClick={onModalClose}>
+      <div id='modal' className={modal.modal} style={{ height: `${modalHeightValue}` }}>
+        <div id='closeIcon' className={modal.closeIcon} onClick={onModalClose}>
           <CloseIcon type='primary' />
         </div>
         {children}

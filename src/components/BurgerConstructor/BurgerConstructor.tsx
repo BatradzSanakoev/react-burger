@@ -57,7 +57,7 @@ const BurgerConstructor = (props: TBurgerConstructorProps) => {
 
   return (
     <div className={`mt-25 ${burgerConstructor.content}`}>
-      <div style={{ border: `${isHover ? '2px solid #4c4cff' : ''}`, borderRadius: 40 }} ref={dropRef}>
+      <div id='constructorContainer' style={{ border: `${isHover ? '2px solid #4c4cff' : ''}`, borderRadius: 40 }} ref={dropRef}>
         {constructorBuns || constructorIngredients.length > 0 ? (
           <div>
             <div>
