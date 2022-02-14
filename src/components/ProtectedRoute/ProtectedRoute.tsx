@@ -10,6 +10,12 @@ type TProtectedRouteProps = {
 export const ProtectedRoute = ({ children, ...rest }: TProtectedRouteProps) => {
   const { isAuth, getUserRequest } = useSelector(state => state.user);
 
-  if (getUserRequest) return null;
-  return <Route {...rest} render={({ location }) => (isAuth ? children : <Redirect to={{ pathname: '/login', state: { from: location } }} />)} exact />;
+  if (getUserRequest && !isAuth) return null;
+  return (
+    <Route
+      {...rest}
+      render={({ location }) => (isAuth ? children : <Redirect to={{ pathname: '/login', state: { from: location.pathname } }} />)}
+      exact
+    />
+  );
 };

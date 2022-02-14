@@ -23,8 +23,8 @@ export const Login = () => {
     dispatch(login({ email: email, password: password, history: history }));
   };
 
-  if (getUserRequest) return null;
-  else if (!getUserRequest && isAuth) return <Redirect to={(location as any).state?.from || '/profile'} />;
+  // if (getUserRequest) return null;
+  if (getUserRequest && isAuth) return <Redirect to={{ pathname: (location as any).state?.from ?? '/profile' }} />;
 
   return (
     <main className={loginStyles.section}>

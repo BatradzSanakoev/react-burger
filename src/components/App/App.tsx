@@ -49,7 +49,7 @@ const App = () => {
     if (backgroundForProfile) history.replace(backgroundForProfile);
   }, [modalType, backgroundForIngredient, history, backgroundForFeed, backgroundForProfile, dispatch]);
 
-  const handleSetOrderType = React.useCallback(() => {
+  const handleSetOrderType = useCallback(() => {
     setModalType('order');
   }, []);
 
@@ -57,12 +57,12 @@ const App = () => {
     if (getCookie('accessToken')) dispatch(getUser());
     else dispatch({ type: GET_USER_FAILED });
     dispatch(getBurgerIngredients());
-  }, []);
+  }, [dispatch]);
 
   return (
-    <>
+    <div>
       {modalDisplay && (
-        <Modal onModalClose={handleCloseModal} type={modalType}>
+        <Modal onModalClose={handleCloseModal}>
           <OrderDetails />
         </Modal>
       )}
@@ -81,10 +81,10 @@ const App = () => {
         <Route path='/feed' exact>
           <Feed />
         </Route>
-        <Route path='/feed/:id'>
+        <Route path='/feed/:id' exact>
           <FeedDetails />
         </Route>
-        <Route path='/profile/orders/:id'>
+        <Route path='/profile/orders/:id' exact>
           <FeedDetails />
         </Route>
         <Route path='/login' exact>
@@ -102,32 +102,32 @@ const App = () => {
         <ProtectedRoute path='/profile'>
           <Profile />
         </ProtectedRoute>
-        <Route path='/ingredients/:id'>
+        <Route path='/ingredients/:id' exact>
           <IngredientDetails />
         </Route>
       </Switch>
       {backgroundForIngredient && (
-        <Route path='/ingredients/:id'>
-          <Modal onModalClose={handleCloseModal} type={'ingredient'}>
+        <Route path='/ingredients/:id' exact>
+          <Modal onModalClose={handleCloseModal}>
             <IngredientDetails />
           </Modal>
         </Route>
       )}
       {backgroundForFeed && (
-        <Route path='/feed/:id'>
-          <Modal onModalClose={handleCloseModal} type={'order'}>
+        <Route path='/feed/:id' exact>
+          <Modal onModalClose={handleCloseModal}>
             <FeedDetails />
           </Modal>
         </Route>
       )}
       {backgroundForProfile && (
-        <Route path='/profile/orders/:id'>
-          <Modal onModalClose={handleCloseModal} type={'order'}>
+        <Route path='/profile/orders/:id' exact>
+          <Modal onModalClose={handleCloseModal}>
             <FeedDetails />
           </Modal>
         </Route>
       )}
-    </>
+    </div>
   );
 };
 

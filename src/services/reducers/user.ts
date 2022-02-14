@@ -43,7 +43,7 @@ const initialState: TInitialState = {
   logoutRequest: false,
   logoutError: false,
   errorText: null,
-  getUserRequest: false,
+  getUserRequest: true,
   getUserError: false,
   getUserLoaded: false,
   userUpdateRequest: false,
@@ -138,7 +138,6 @@ export const userReducer = (state = initialState, action: TUserActions): TInitia
         getUserError: false,
         user: action.payload,
         isAuth: true,
-        getUserLoaded: true,
         errorText: ''
       };
     }
@@ -147,8 +146,7 @@ export const userReducer = (state = initialState, action: TUserActions): TInitia
         ...state,
         getUserRequest: false,
         getUserError: true,
-        errorText: 'Ошибка при получении данных пользователя',
-        getUserLoaded: false
+        errorText: 'Ошибка при получении данных пользователя'
       };
     }
     case USER_UPDATE_REQUEST: {

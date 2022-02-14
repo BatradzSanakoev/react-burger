@@ -98,7 +98,7 @@ export const Profile = () => {
             </div>
           </Route>
           <Route path='/profile/orders'>
-            <div style={{ width: '70%' }}>
+            <div style={{ width: '50%' }}>
               <div className={profile.ordersList}>
                 {orders.map(order => (
                   <OrderCard

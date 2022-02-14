@@ -11,7 +11,7 @@
 
 .categories {
     width: 100%;
-    height: calc(100vh - 250px);
+    height: calc(100vh - 270px);
     display: flex;
     flex-direction: column;
     overflow-y: scroll;

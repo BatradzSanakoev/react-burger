@@ -15,24 +15,24 @@ const IngredientDetails = () => {
   if (!ingredientsLoaded) return null;
   else if (ingredientsLoaded && !currentIngredient) return <Redirect to='/' />;
   return (
-    <div className={ingredientDetails.container} style={{ height: `${!(location as any).state?.background && '90vh'}` }}>
+    <div className={ingredientDetails.container} >
       <h3 className={`text text_type_main-large mt-15`}>Детали ингредиента</h3>
       <img src={currentIngredient?.image_large} alt='ingredient-icon' className={ingredientDetails.image} />
       <p className={`text text_type_main-medium mt-4`}>{currentIngredient?.name}</p>
       <div className={`${ingredientDetails.properties} mt-8`}>
-        <div className={ingredientDetails.property}>
+        <div id='calories' className={ingredientDetails.property}>
           <p className='text text_type_main-default text_color_inactive'>Калории,ккал</p>
           <p className='text text_type_main-default text_color_inactive'>{currentIngredient?.calories}</p>
         </div>
-        <div className={ingredientDetails.property}>
+        <div id='proteins' className={ingredientDetails.property}>
           <p className='text text_type_main-default text_color_inactive'>Белки, г</p>
           <p className='text text_type_main-default text_color_inactive'>{currentIngredient?.proteins}</p>
         </div>
-        <div className={ingredientDetails.property}>
+        <div id='fat' className={ingredientDetails.property}>
           <p className='text text_type_main-default text_color_inactive'>Жиры, г</p>
           <p className='text text_type_main-default text_color_inactive'>{currentIngredient?.fat}</p>
         </div>
-        <div className={ingredientDetails.property}>
+        <div id='carbohydrates' className={ingredientDetails.property}>
           <p className='text text_type_main-default text_color_inactive'>Углеводы, г</p>
           <p className='text text_type_main-default text_color_inactive'>{currentIngredient?.carbohydrates}</p>
         </div>

@@ -7,13 +7,11 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 type TModalProps = {
   children: ReactNode;
   onModalClose: () => void;
-  type: string | null;
 };
 
 const modalRoot: HTMLElement | null = document.getElementById('modals');
 
-const Modal = ({ children, onModalClose, type }: TModalProps) => {
-  const modalHeightValue = type === 'order' ? '90%' : '70%';
+const Modal = ({ children, onModalClose }: TModalProps) => {
 
   const closeByEscape = (e: KeyboardEvent) => {
     e.code === 'Escape' && onModalClose();
@@ -26,8 +24,8 @@ const Modal = ({ children, onModalClose, type }: TModalProps) => {
 
   return ReactDOM.createPortal(
     <ModalOverlay onModalClose={onModalClose}>
-      <div className={modal.modal} style={{ height: `${modalHeightValue}` }}>
-        <div className={modal.closeIcon} onClick={onModalClose}>
+      <div id='modal' className={modal.modal}>
+        <div id='closeIcon' className={modal.closeIcon} onClick={onModalClose}>
           <CloseIcon type='primary' />
         </div>
         {children}
